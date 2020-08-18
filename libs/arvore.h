@@ -50,6 +50,10 @@ template <typename T> class arvore : private BasicTree{
     class preorder_riterator;
     class inorder_riterator;
 
+    // iteradores default: inorder
+    inorder_iterator begin() { return inorder_begin(); }
+    inorder_iterator end() const { return inorder_end(); }
+
     // iteradores diretos ...
     preorder_iterator preorder_begin();
     preorder_iterator preorder_end() const;
