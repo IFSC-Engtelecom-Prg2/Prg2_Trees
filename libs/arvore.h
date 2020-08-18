@@ -12,10 +12,16 @@
 #include <list>
 #include <istream>
 #include <string>
+#include <iterator>
+#include <stack>
+#include <queue>
 
 using std::string;
 using std::istream;
 using std::list;
+using std::forward_iterator_tag;
+using std::stack;
+using std::queue;
 
 namespace prglib {
     
@@ -38,7 +44,26 @@ template <typename T> class arvore : private BasicTree{
   // obtém o valor da raiz da árvore
   const T& obtem() const ;
 
-  // enumera os dados in-order, pre-order, post-order e breadth-first
+    // iteradores PRE-ORDER e IN-ORDER
+    class preorder_iterator;
+    class inorder_iterator;
+    class preorder_riterator;
+    class inorder_riterator;
+
+    // iteradores diretos ...
+    preorder_iterator preorder_begin();
+    preorder_iterator preorder_end() const;
+    inorder_iterator inorder_begin();
+    inorder_iterator inorder_end() const;
+    // iteradores reversos ...
+    preorder_riterator preorder_rbegin();
+    preorder_riterator preorder_rend() const;
+    inorder_riterator inorder_rbegin();
+    inorder_riterator inorder_rend() const;
+
+
+  // Versão alternativa: enumera os dados in-order, pre-order, post-order e breadth-first
+  // copiando-os para uma lista
   void listeInOrder(list<T> & result);
   void listePreOrder(list<T> & result);
   void listePostOrder(list<T> & result);
@@ -53,15 +78,10 @@ template <typename T> class arvore : private BasicTree{
   // retorna a subárvore direita
   arvore<T> * direita();
 
-  // itera a árvore
-  void inicia();
-  bool fim();
-  T& proximo();
-
   // itera a árvore de forma reversa
-  void iniciaPeloFim();
-  bool inicio();
-  T& anterior();
+//  void iniciaPeloFim();
+//  bool inicio();
+//  T& anterior();
 
   // remove um dado
   T remove(const T & algo);
@@ -111,8 +131,61 @@ template <typename T> class arvore : private BasicTree{
     
   arvore<T> * rotacionaL();
   arvore<T> * rotacionaR();
-    
+
+public:
+    class preorder_iterator: public forward_iterator_tag {
+    public:
+        preorder_iterator();
+        preorder_iterator(const preorder_iterator & it);
+        preorder_iterator(arvore<T> * raiz);
+        ~preorder_iterator() {}
+
+        bool operator==(const preorder_iterator & it) const;
+        bool operator!=(const preorder_iterator & it) const;
+        const T& operator*() const;
+        virtual preorder_iterator& operator++();
+        virtual preorder_iterator& operator++(int);
+    protected:
+        stack<arvore<T>*> p;
+    };
+
+    class inorder_iterator: public preorder_iterator {
+    public:
+        inorder_iterator();
+        inorder_iterator(const inorder_iterator & it);
+        inorder_iterator(arvore<T> * raiz);
+        ~inorder_iterator() {}
+
+        virtual inorder_iterator& operator++();
+        inorder_iterator& operator++(int);
+    };
+
+    class preorder_riterator: public preorder_iterator {
+    public:
+        preorder_riterator();
+        preorder_riterator(const preorder_riterator & it);
+        preorder_riterator(arvore<T> * raiz);
+        ~preorder_riterator() {}
+
+        virtual preorder_riterator& operator++();
+        preorder_riterator& operator++(int);
+    };
+
+    class inorder_riterator: public preorder_iterator {
+    public:
+        inorder_riterator();
+        inorder_riterator(const inorder_riterator & it);
+        inorder_riterator(arvore<T> * raiz);
+        ~inorder_riterator() {}
+
+        virtual inorder_riterator& operator++();
+        inorder_riterator& operator++(int);
+    };
+
+
 };
+
+
 
 // gera uma descrição de um diagrama DOT para a árvore
 // O resultado deve ser gravado em arquivo para se gerar o diagrama

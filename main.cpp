@@ -16,6 +16,9 @@ int main(int argc, char** argv) {
     cout << "Valor da raiz: " << a->obtem() << endl;
     cout << "Valor: " << a->obtem(5) << endl;
 
+    for (auto it = a->inorder_rbegin(); it != a->inorder_rend(); it++) {
+        cout << *it << endl;
+    }
     list<int> l;
     a->listeInOrder(l);
 

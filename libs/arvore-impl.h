@@ -126,31 +126,31 @@ template <typename T> arvore<T>* arvore<T>::balanceia(bool otimo) {
     return ptr;
 }
 
-template <typename T> void arvore<T>::inicia() {
-    BasicTree::inicia();
-}
+//template <typename T> void arvore<T>::inicia() {
+//    BasicTree::inicia();
+//}
+//
+//template <typename T> T& arvore<T>::proximo() {
+//    T * ptr = (T*)BasicTree::proximo();
+//    return *ptr;
+//}
+//
+//template <typename T> bool arvore<T>::fim() {
+//    return BasicTree::fim();
+//}
 
-template <typename T> T& arvore<T>::proximo() {
-    T * ptr = (T*)BasicTree::proximo();
-    return *ptr;
-}
-
-template <typename T> bool arvore<T>::fim() {
-    return BasicTree::fim();
-}
-
-template <typename T> void arvore<T>::iniciaPeloFim() {
-    BasicTree::rinicia();
-}
-
-template <typename T> T& arvore<T>::anterior() {
-    T * ptr = (T*)BasicTree::rproximo();
-    return *ptr;
-}
-
-template <typename T> bool arvore<T>::inicio() {
-    return BasicTree::rfim();
-}
+//template <typename T> void arvore<T>::iniciaPeloFim() {
+//    BasicTree::rinicia();
+//}
+//
+//template <typename T> T& arvore<T>::anterior() {
+//    T * ptr = (T*)BasicTree::rproximo();
+//    return *ptr;
+//}
+//
+//template <typename T> bool arvore<T>::inicio() {
+//    return BasicTree::rfim();
+//}
 
 template <typename T> T& arvore<T>::obtemMenor() const{
     T * ptr = (T*)BasicTree::obtemMenor();
@@ -249,6 +249,183 @@ template <typename T> void arvore<T>::destroi(void * p1) {
         out << "}" << endl;
 
         return out.str();
+    }
+
+    template<typename T> typename arvore<T>::preorder_iterator arvore<T>::preorder_begin() {
+        return preorder_iterator(this);
+    }
+
+    template<typename T> typename arvore<T>::preorder_iterator arvore<T>::preorder_end() const {
+        return preorder_iterator();
+    }
+
+    template<typename T> typename arvore<T>::inorder_iterator arvore<T>::inorder_begin() {
+        return inorder_iterator(this);
+    }
+
+    template<typename T> typename arvore<T>::inorder_iterator arvore<T>::inorder_end() const {
+        return inorder_iterator();
+    }
+
+    template<typename T> typename arvore<T>::preorder_riterator arvore<T>::preorder_rbegin() {
+        return preorder_riterator(this);
+    }
+
+    template<typename T> typename arvore<T>::preorder_riterator arvore<T>::preorder_rend() const {
+        return preorder_riterator();
+    }
+
+    template<typename T> typename arvore<T>::inorder_riterator arvore<T>::inorder_rbegin() {
+        return inorder_riterator(this);
+    }
+
+    template<typename T> typename arvore<T>::inorder_riterator arvore<T>::inorder_rend() const {
+        return inorder_riterator();
+    }
+
+    template<typename T>
+    arvore<T>::preorder_iterator::preorder_iterator() {
+
+    }
+
+    template<typename T>
+    arvore<T>::preorder_iterator::preorder_iterator(const arvore::preorder_iterator &it) {
+        p = it.p;
+    }
+
+    template<typename T>
+    arvore<T>::preorder_iterator::preorder_iterator(arvore<T> *raiz) {
+        p.push(raiz);
+    }
+
+    template<typename T>
+    bool arvore<T>::preorder_iterator::operator==(const arvore::preorder_iterator &it) const {
+        return p == it.p;
+    }
+
+    template<typename T>
+    bool arvore<T>::preorder_iterator::operator!=(const arvore::preorder_iterator &it) const {
+        return p != it.p;
+    }
+
+    template<typename T>
+    const T &arvore<T>::preorder_iterator::operator*() const {
+        if (p.empty()) throw -1; // a meu critério ???
+        auto ptr = p.top();
+        return ptr->obtem();
+    }
+
+    template<typename T>
+    typename arvore<T>::preorder_iterator &arvore<T>::preorder_iterator::operator++() {
+        if (! p.empty()) {
+            auto ptr = p.top();
+            p.pop();
+            if (ptr->direita() != nullptr) p.push(ptr->direita());
+            if (ptr->esquerda() != nullptr) p.push(ptr->esquerda());
+        }
+        return *this;
+    }
+
+    template<typename T>
+    typename arvore<T>::preorder_iterator &arvore<T>::preorder_iterator::operator++(int) {
+        return ++(*this);
+    }
+
+    template<typename T>
+    arvore<T>::preorder_riterator::preorder_riterator() {
+
+    }
+
+    template<typename T>
+    arvore<T>::preorder_riterator::preorder_riterator(const arvore::preorder_riterator &it):preorder_iterator(it) {
+    }
+
+    template<typename T>
+    arvore<T>::preorder_riterator::preorder_riterator(arvore<T> *raiz): preorder_iterator(raiz) {
+    }
+
+    template<typename T>
+    typename arvore<T>::preorder_riterator &arvore<T>::preorder_riterator::operator++() {
+        auto & p = this->p;
+
+        if (! p.empty()) {
+            auto ptr = p.top();
+            p.pop();
+            if (ptr->esquerda() != nullptr) p.push(ptr->esquerda());
+            if (ptr->direita() != nullptr) p.push(ptr->direita());
+        }
+        return *this;
+    }
+
+    template<typename T>
+    typename arvore<T>::preorder_riterator &arvore<T>::preorder_riterator::operator++(int) {
+        return ++(*this);
+    }
+
+    template<typename T>
+    arvore<T>::inorder_iterator::inorder_iterator(): arvore<T>::preorder_iterator() {
+
+    }
+
+    template<typename T>
+    arvore<T>::inorder_iterator::inorder_iterator(const arvore::inorder_iterator &it): arvore<T>::preorder_iterator(it) {
+    }
+
+    template<typename T>
+    arvore<T>::inorder_iterator::inorder_iterator(arvore<T> *raiz) {
+        for (auto ptr = raiz; ptr != nullptr; ptr=ptr->esquerda()) {
+            this->p.push(ptr);
+        }
+    }
+
+    template<typename T>
+    typename arvore<T>::inorder_iterator &arvore<T>::inorder_iterator::operator++() {
+        if (! this->p.empty()) {
+            auto ptr = this->p.top();
+            this->p.pop();
+            for (ptr = ptr->direita(); ptr != nullptr; ptr=ptr->esquerda()) {
+                this->p.push(ptr);
+            }
+        }
+        return *this;
+    }
+
+    template<typename T>
+    typename arvore<T>::inorder_iterator &arvore<T>::inorder_iterator::operator++(int) {
+        return ++(*this);
+    }
+
+    template<typename T>
+    arvore<T>::inorder_riterator::inorder_riterator(): arvore<T>::preorder_iterator() {
+
+    }
+
+    template<typename T>
+    arvore<T>::inorder_riterator::inorder_riterator(const arvore::inorder_riterator &it): arvore<T>::preorder_iterator(it) {
+    }
+
+    template<typename T>
+    arvore<T>::inorder_riterator::inorder_riterator(arvore<T> *raiz) {
+        for (auto ptr = raiz; ptr != nullptr; ptr=ptr->direita()) {
+            this->p.push(ptr);
+        }
+    }
+
+    template<typename T>
+    typename arvore<T>::inorder_riterator &arvore<T>::inorder_riterator::operator++() {
+        if (! this->p.empty()) {
+            auto ptr = this->p.top();
+            this->p.pop();
+            for (ptr = ptr->esquerda(); ptr != nullptr; ptr=ptr->direita()) {
+                this->p.push(ptr);
+            }
+        }
+        return *this;
+    }
+
+    template<typename T>
+    typename arvore<T>::inorder_riterator &arvore<T>::inorder_riterator::operator++(int) {
+        return ++(*this);
     }
 
 };
