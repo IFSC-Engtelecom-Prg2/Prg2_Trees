@@ -15,7 +15,6 @@
 #include <iterator>
 #include <stack>
 #include <queue>
-#include <memory>
 
 using std::string;
 using std::istream;
@@ -23,12 +22,14 @@ using std::list;
 using std::forward_iterator_tag;
 using std::stack;
 using std::queue;
-using std::shared_ptr;
 
 namespace prglib {
     
     template <typename T> class nodo_arvore;
 
+    // Uma arvore de pesquisa binária com operações que não modificam sua estrutura
+    // Esta classe implementa as funcionalidades básicas, que não alteram a árvore
+    // Isso possibilita que seus objetos compartilhem nodos (com limitações)
     template <typename T> class arvore_basica {
     public:
         arvore_basica();
@@ -74,9 +75,14 @@ namespace prglib {
         unsigned int tamanho() const;
 
         // retorna a subárvore esquerda
+        // Ela compartilha os nodos desta árvore
+        // Se o ramo esquerdo desta árvore for destruído,
+        // a árvore retornada fica inválida ... se for usada depois disso,
+        // um erro de acesso à memória ocorrerá
         const arvore_basica<T> esquerda() const;
 
         // retorna a subárvore direita
+        // mesmas restrições que "esquerda()"
         const arvore_basica<T> direita() const;
 
         // retorna o menor dado
@@ -156,6 +162,8 @@ namespace prglib {
         };
     };
 
+    // Uma árvore de pesquisa binária que pode ser modificada
+    // Esta árvore estende arvore_basica com operações que modificam sua estrutura
     template <typename T> class arvore : public arvore_basica<T> {
     public:
         arvore();
