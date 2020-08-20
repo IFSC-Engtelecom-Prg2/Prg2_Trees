@@ -15,9 +15,9 @@ using std::ostream;
 using std::ostringstream;
 using std::endl;
 
-#define IF_PTR(p) if (this->p.use_count() > 0)
+#define IF_PTR(p) if (this->p != nullptr)
 
-#define TRY_PROC(p) if (p.use_count() == 0) throw -1; \
+#define TRY_PROC(p) if (p == nullptr) throw -1; \
                  else
 
 namespace prglib {
@@ -26,12 +26,23 @@ namespace prglib {
 
     }
 
-    template <typename T> arvore_basica<T>::arvore_basica(const arvore_basica<T>& outra) {
-        raiz = outra.raiz;
+    template <typename T> arvore_basica<T>::~arvore_basica() {
+
     }
 
-    template <typename T> arvore_basica<T>::arvore_basica(nodo_arvore<T> * ptr) {
-        if (ptr != nullptr) raiz.reset(ptr);
+    template <typename T> arvore_basica<T>::arvore_basica(const arvore_basica<T>& outra) {
+        if (!outra.vazia()) {
+            auto it = outra.preorder_begin();
+            raiz = new nodo_arvore<T>(it->obtem());
+            for (; it != outra.preorder_end(); it++) {
+                raiz->adiciona(it->obtem());
+            }
+        } else raiz = nullptr;
+    }
+
+    template <typename T> arvore_basica<T>::arvore_basica(const nodo_arvore<T> * ptr) {
+        nodo_arvore<T> * p = (nodo_arvore<T>*)ptr;
+        raiz = p;
     }
 
     template <typename T> arvore_basica<T>::arvore_basica(istream &inp) {
@@ -39,7 +50,7 @@ namespace prglib {
 
         inp >> data;
         if (inp.fail()) throw -1;
-        raiz.reset(new nodo_arvore<T>(data));
+        raiz = new nodo_arvore<T>(data);
 
         while (inp >> data) raiz->adiciona(data);
     }
@@ -47,9 +58,13 @@ namespace prglib {
     template <typename T> arvore_basica<T>::arvore_basica(list<T> &dados) {
         if (! dados.empty()) {
             auto it = dados.begin();
-            raiz.reset(new nodo_arvore<T>(*it));
+            raiz = new nodo_arvore<T>(*it);
             for (it++; it != dados.end(); it++) raiz->adiciona(*it);
         }
+    }
+
+    template <typename T> bool arvore_basica<T>::vazia() const {
+        return raiz == nullptr;
     }
 
     template <typename T> const T& arvore_basica<T>::obtem() const {
@@ -152,10 +167,7 @@ namespace prglib {
         }
     }
 
-    template <typename T> arvore<T>::arvore(const arvore<T>& outra) {
-        IF_PTR(outra.raiz) {
-            this->raiz.reset(new nodo_arvore<T>(outra.raiz->obtem()));
-        }
+    template <typename T> arvore<T>::arvore(const arvore<T>& outra): arvore_basica<T>(outra) {
     }
 
     template <typename T> arvore<T>::arvore(list<T> &dados): arvore_basica<T>(dados) {}
@@ -163,14 +175,16 @@ namespace prglib {
     template <typename T> arvore<T>::arvore(istream &inp): arvore_basica<T>(inp) {}
 
     template <typename T> arvore<T>::~arvore() {
-        // raiz automaticamente destruída (shared_ptr)
+        IF_PTR(raiz) {
+            delete this->raiz;
+        }
     }
 
     template <typename T> void arvore<T>::adiciona(const T &dado) {
         IF_PTR(raiz) {
             this->raiz->adiciona(dado);
         } else {
-            this->raiz.reset(new nodo_arvore<T>(dado));
+            this->raiz = new nodo_arvore<T>(dado);
         }
     }
 
@@ -193,7 +207,7 @@ namespace prglib {
     }
 
     template <typename T> nodo_arvore<T>::~nodo_arvore() {
-}
+    }
     
 template <typename T> nodo_arvore<T>::nodo_arvore() : BasicTree() {    
 }
@@ -222,12 +236,12 @@ template <typename T> const T& nodo_arvore<T>::obtem() const {
     return this->data;
 }
 
-template <typename T> nodo_arvore<T> * nodo_arvore<T>::esquerda() {
-    return static_cast<nodo_arvore<T>*>(this->esq);
+template <typename T> const nodo_arvore<T> * nodo_arvore<T>::esquerda() const {
+    return static_cast<const nodo_arvore<T>*>(this->esq);
 }
 
-template <typename T> nodo_arvore<T> * nodo_arvore<T>::direita() {
-    return static_cast<nodo_arvore<T>*>(this->dir);
+template <typename T> const nodo_arvore<T> * nodo_arvore<T>::direita() const {
+    return static_cast<const nodo_arvore<T>*>(this->dir);
 }
 
 template <typename T> void nodo_arvore<T>::listeEmLargura(list<T> & result) {
@@ -382,7 +396,7 @@ template <typename T> void nodo_arvore<T>::destroi(void * p1) {
     delete o1;
 }
 
-    template <typename T> void desenha_nodos(const arvore<T> & arv, ostream & out) {
+    template <typename T> void desenha_nodos(const arvore_basica<T> & arv, ostream & out) {
         auto raiz = arv.obtem();
         auto esq = arv.esquerda();
         auto dir = arv.direita();
@@ -401,7 +415,7 @@ template <typename T> void nodo_arvore<T>::destroi(void * p1) {
 
     }
 
-    template <typename T> string desenha_arvore(const arvore<T> & arv) {
+    template <typename T> string desenha_arvore(const arvore_basica<T> & arv) {
         ostringstream out;
 
         out << "strict graph {" << endl;
@@ -411,32 +425,32 @@ template <typename T> void nodo_arvore<T>::destroi(void * p1) {
         return out.str();
     }
 
-    template<typename T> typename arvore_basica<T>::preorder_iterator arvore_basica<T>::preorder_begin() {
-        return preorder_iterator(this);
+    template<typename T> typename arvore_basica<T>::preorder_iterator arvore_basica<T>::preorder_begin() const{
+        return preorder_iterator(this->raiz);
     }
 
     template<typename T> typename arvore_basica<T>::preorder_iterator arvore_basica<T>::preorder_end() const {
         return preorder_iterator();
     }
 
-    template<typename T> typename arvore_basica<T>::inorder_iterator arvore_basica<T>::inorder_begin() {
-        return inorder_iterator(this);
+    template<typename T> typename arvore_basica<T>::inorder_iterator arvore_basica<T>::inorder_begin() const{
+        return inorder_iterator(this->raiz);
     }
 
     template<typename T> typename arvore_basica<T>::inorder_iterator arvore_basica<T>::inorder_end() const {
         return inorder_iterator();
     }
 
-    template<typename T> typename arvore_basica<T>::preorder_riterator arvore_basica<T>::preorder_rbegin() {
-        return preorder_riterator(this);
+    template<typename T> typename arvore_basica<T>::preorder_riterator arvore_basica<T>::preorder_rbegin() const {
+        return preorder_riterator(this->raiz);
     }
 
     template<typename T> typename arvore_basica<T>::preorder_riterator arvore_basica<T>::preorder_rend() const {
         return preorder_riterator();
     }
 
-    template<typename T> typename arvore_basica<T>::inorder_riterator arvore_basica<T>::inorder_rbegin() {
-        return inorder_riterator(this);
+    template<typename T> typename arvore_basica<T>::inorder_riterator arvore_basica<T>::inorder_rbegin() const{
+        return inorder_riterator(this->raiz);
     }
 
     template<typename T> typename arvore_basica<T>::inorder_riterator arvore_basica<T>::inorder_rend() const {
@@ -454,7 +468,7 @@ template <typename T> void nodo_arvore<T>::destroi(void * p1) {
     }
 
     template<typename T>
-    arvore_basica<T>::preorder_iterator::preorder_iterator(const arvore_basica<T> & raiz) {
+    arvore_basica<T>::preorder_iterator::preorder_iterator(const nodo_arvore<T> * raiz) {
         p.push(raiz);
     }
 
@@ -475,14 +489,19 @@ template <typename T> void nodo_arvore<T>::destroi(void * p1) {
         return ptr->obtem();
     }
 
+    template <typename T> const nodo_arvore<T>* arvore_basica<T>::preorder_iterator::operator->() const {
+        if (p.empty()) throw -1;
+        auto ptr = p.top();
+        return ptr;
+    }
+
     template<typename T>
     typename arvore_basica<T>::preorder_iterator &arvore_basica<T>::preorder_iterator::operator++() {
         if (! p.empty()) {
             auto ptr = p.top();
             p.pop();
-            auto dir = ptr.direita();
-            if (! dir.vazia()) p.push(dir);
-            if (ptr.esquerda() != nullptr) p.push(ptr->esquerda());
+            if (ptr->direita() != nullptr) p.push(ptr->direita());
+            if (ptr->esquerda() != nullptr) p.push(ptr->esquerda());
         }
         return *this;
     }
@@ -502,7 +521,7 @@ template <typename T> void nodo_arvore<T>::destroi(void * p1) {
     }
 
     template<typename T>
-    arvore_basica<T>::preorder_riterator::preorder_riterator(const arvore_basica<T> & raiz): preorder_iterator(raiz) {
+    arvore_basica<T>::preorder_riterator::preorder_riterator(const nodo_arvore<T> * raiz): preorder_iterator(raiz) {
     }
 
     template<typename T>
@@ -533,7 +552,7 @@ template <typename T> void nodo_arvore<T>::destroi(void * p1) {
     }
 
     template<typename T>
-    arvore_basica<T>::inorder_iterator::inorder_iterator(const arvore_basica<T> & raiz) {
+    arvore_basica<T>::inorder_iterator::inorder_iterator(const nodo_arvore<T> * raiz) {
         for (auto ptr = raiz; ptr != nullptr; ptr=ptr->esquerda()) {
             this->p.push(ptr);
         }
@@ -542,7 +561,7 @@ template <typename T> void nodo_arvore<T>::destroi(void * p1) {
     template<typename T>
     typename arvore_basica<T>::inorder_iterator &arvore_basica<T>::inorder_iterator::operator++() {
         if (! this->p.empty()) {
-            auto ptr = this->p.top();
+            const nodo_arvore<T> * ptr = this->p.top();
             this->p.pop();
             for (ptr = ptr->direita(); ptr != nullptr; ptr=ptr->esquerda()) {
                 this->p.push(ptr);
@@ -566,7 +585,7 @@ template <typename T> void nodo_arvore<T>::destroi(void * p1) {
     }
 
     template<typename T>
-    arvore_basica<T>::inorder_riterator::inorder_riterator(const arvore_basica<T> & raiz) {
+    arvore_basica<T>::inorder_riterator::inorder_riterator(const nodo_arvore<T> * raiz) {
         for (auto ptr = raiz; ptr != nullptr; ptr=ptr->direita()) {
             this->p.push(ptr);
         }

@@ -49,18 +49,18 @@ namespace prglib {
         class inorder_riterator;
 
         // iteradores default: inorder
-        inorder_iterator begin() { return inorder_begin(); }
+        inorder_iterator begin() const { return inorder_begin(); }
         inorder_iterator end() const { return inorder_end(); }
 
         // iteradores diretos ...
-        preorder_iterator preorder_begin();
+        preorder_iterator preorder_begin() const;
         preorder_iterator preorder_end() const;
-        inorder_iterator inorder_begin();
+        inorder_iterator inorder_begin()const;
         inorder_iterator inorder_end() const;
         // iteradores reversos ...
-        preorder_riterator preorder_rbegin();
+        preorder_riterator preorder_rbegin()const;
         preorder_riterator preorder_rend() const;
-        inorder_riterator inorder_rbegin();
+        inorder_riterator inorder_rbegin()const ;
         inorder_riterator inorder_rend() const;
 
         // Versão alternativa: enumera os dados in-order, pre-order, post-order e breadth-first
@@ -101,31 +101,32 @@ namespace prglib {
         int fatorB() const;
 
     protected:
-        shared_ptr<nodo_arvore<T>> raiz;
+        nodo_arvore<T> * raiz;
 
-        arvore_basica(nodo_arvore<T> * ptr);
+        arvore_basica(const nodo_arvore<T> * ptr);
     public:
         class preorder_iterator: public forward_iterator_tag {
         public:
             preorder_iterator();
             preorder_iterator(const preorder_iterator & it);
-            preorder_iterator(const arvore_basica<T> & raiz);
+            preorder_iterator(const nodo_arvore<T> * raiz);
             ~preorder_iterator() {}
 
             bool operator==(const preorder_iterator & it) const;
             bool operator!=(const preorder_iterator & it) const;
+            const nodo_arvore<T>* operator->() const;
             const T& operator*() const;
             virtual preorder_iterator& operator++();
             virtual preorder_iterator& operator++(int);
         protected:
-            stack<nodo_arvore<T>*> p;
+            stack<const nodo_arvore<T>*> p;
         };
 
         class inorder_iterator: public preorder_iterator {
         public:
             inorder_iterator();
             inorder_iterator(const inorder_iterator & it);
-            inorder_iterator(const arvore_basica<T> & raiz);
+            inorder_iterator(const nodo_arvore<T> * raiz);
             ~inorder_iterator() {}
 
             virtual inorder_iterator& operator++();
@@ -136,7 +137,7 @@ namespace prglib {
         public:
             preorder_riterator();
             preorder_riterator(const preorder_riterator & it);
-            preorder_riterator(const arvore_basica<T> & raiz);
+            preorder_riterator(const nodo_arvore<T> * raiz);
             ~preorder_riterator() {}
 
             virtual preorder_riterator& operator++();
@@ -147,7 +148,7 @@ namespace prglib {
         public:
             inorder_riterator();
             inorder_riterator(const inorder_riterator & it);
-            inorder_riterator(const arvore_basica<T> & raiz);
+            inorder_riterator(const nodo_arvore<T> * raiz);
             ~inorder_riterator() {}
 
             virtual inorder_riterator& operator++();
@@ -201,10 +202,10 @@ template <typename T> class nodo_arvore : private BasicTree{
     unsigned int tamanho() const;
 
     // retorna a subárvore esquerda
-    nodo_arvore<T> * esquerda();
+    const nodo_arvore<T> * esquerda() const;
 
     // retorna a subárvore direita
-    nodo_arvore<T> * direita();
+    const nodo_arvore<T> * direita() const;
 
     // itera a árvore de forma reversa
 //  void iniciaPeloFim();
@@ -267,7 +268,7 @@ template <typename T> class nodo_arvore : private BasicTree{
 // gera uma descrição de um diagrama DOT para a árvore
 // O resultado deve ser gravado em arquivo para se gerar o diagrama
 // com o programa "dot" ou "dotty"
-template <typename T> string desenha_arvore(const arvore<T> & arv);
+template <typename T> string desenha_arvore(const arvore_basica<T> & arv);
 
 } // fim do namespace
 
