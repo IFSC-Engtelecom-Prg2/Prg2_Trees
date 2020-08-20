@@ -33,6 +33,9 @@ namespace prglib {
     public:
         arvore_basica();
         arvore_basica(const arvore_basica<T> & outra);
+        arvore_basica(list<T> & dados);
+        arvore_basica(istream & inp);
+
         ~arvore_basica();
 
         const T & obtem() const;
@@ -77,10 +80,10 @@ namespace prglib {
         const arvore_basica<T> direita() const;
 
         // retorna o menor dado
-        T & obtemMenor() const;
+        const T & obtemMenor() const;
 
         // retorna o maior dado
-        T & obtemMaior() const;
+        const T & obtemMaior() const;
 
         // copia na lista "result" os dados menores que "algo"
         void obtemMenoresQue(list<T> & result, const T & algo) const;
@@ -101,12 +104,63 @@ namespace prglib {
         shared_ptr<nodo_arvore<T>> raiz;
 
         arvore_basica(nodo_arvore<T> * ptr);
+    public:
+        class preorder_iterator: public forward_iterator_tag {
+        public:
+            preorder_iterator();
+            preorder_iterator(const preorder_iterator & it);
+            preorder_iterator(const arvore_basica<T> & raiz);
+            ~preorder_iterator() {}
+
+            bool operator==(const preorder_iterator & it) const;
+            bool operator!=(const preorder_iterator & it) const;
+            const T& operator*() const;
+            virtual preorder_iterator& operator++();
+            virtual preorder_iterator& operator++(int);
+        protected:
+            stack<nodo_arvore<T>*> p;
+        };
+
+        class inorder_iterator: public preorder_iterator {
+        public:
+            inorder_iterator();
+            inorder_iterator(const inorder_iterator & it);
+            inorder_iterator(const arvore_basica<T> & raiz);
+            ~inorder_iterator() {}
+
+            virtual inorder_iterator& operator++();
+            inorder_iterator& operator++(int);
+        };
+
+        class preorder_riterator: public preorder_iterator {
+        public:
+            preorder_riterator();
+            preorder_riterator(const preorder_riterator & it);
+            preorder_riterator(const arvore_basica<T> & raiz);
+            ~preorder_riterator() {}
+
+            virtual preorder_riterator& operator++();
+            preorder_riterator& operator++(int);
+        };
+
+        class inorder_riterator: public preorder_iterator {
+        public:
+            inorder_riterator();
+            inorder_riterator(const inorder_riterator & it);
+            inorder_riterator(const arvore_basica<T> & raiz);
+            ~inorder_riterator() {}
+
+            virtual inorder_riterator& operator++();
+            inorder_riterator& operator++(int);
+        };
     };
 
     template <typename T> class arvore : public arvore_basica<T> {
     public:
         arvore();
         arvore(const arvore<T> & outra);
+        arvore(list<T> & dados);
+        arvore(istream & inp);
         ~arvore();
 
         void adiciona(const T & dado);
@@ -125,8 +179,6 @@ template <typename T> class nodo_arvore : private BasicTree{
   nodo_arvore();
   //nodo_arvore(const nodo_arvore<T> & outra);
   nodo_arvore(const T & dado);
-  nodo_arvore(list<T> & dados);
-  nodo_arvore(istream & inp);
 
   virtual ~nodo_arvore();
 
@@ -208,57 +260,6 @@ template <typename T> class nodo_arvore : private BasicTree{
   nodo_arvore<T> * rotacionaL();
   nodo_arvore<T> * rotacionaR();
 
-public:
-    class preorder_iterator: public forward_iterator_tag {
-    public:
-        preorder_iterator();
-        preorder_iterator(const preorder_iterator & it);
-        preorder_iterator(nodo_arvore<T> * raiz);
-        ~preorder_iterator() {}
-
-        bool operator==(const preorder_iterator & it) const;
-        bool operator!=(const preorder_iterator & it) const;
-        const T& operator*() const;
-        virtual preorder_iterator& operator++();
-        virtual preorder_iterator& operator++(int);
-    protected:
-        stack<nodo_arvore<T>*> p;
-    };
-
-    class inorder_iterator: public preorder_iterator {
-    public:
-        inorder_iterator();
-        inorder_iterator(const inorder_iterator & it);
-        inorder_iterator(nodo_arvore<T> * raiz);
-        ~inorder_iterator() {}
-
-        virtual inorder_iterator& operator++();
-        inorder_iterator& operator++(int);
-    };
-
-    class preorder_riterator: public preorder_iterator {
-    public:
-        preorder_riterator();
-        preorder_riterator(const preorder_riterator & it);
-        preorder_riterator(nodo_arvore<T> * raiz);
-        ~preorder_riterator() {}
-
-        virtual preorder_riterator& operator++();
-        preorder_riterator& operator++(int);
-    };
-
-    class inorder_riterator: public preorder_iterator {
-    public:
-        inorder_riterator();
-        inorder_riterator(const inorder_riterator & it);
-        inorder_riterator(nodo_arvore<T> * raiz);
-        ~inorder_riterator() {}
-
-        virtual inorder_riterator& operator++();
-        inorder_riterator& operator++(int);
-    };
-
-
 };
 
 
@@ -266,7 +267,7 @@ public:
 // gera uma descrição de um diagrama DOT para a árvore
 // O resultado deve ser gravado em arquivo para se gerar o diagrama
 // com o programa "dot" ou "dotty"
-template <typename T> string desenha_nodo_arvore(nodo_arvore<T> * arv);
+template <typename T> string desenha_arvore(const arvore<T> & arv);
 
 } // fim do namespace
 
