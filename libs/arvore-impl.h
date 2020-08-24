@@ -28,10 +28,12 @@ template <typename T> arvore<T>::arvore(const T & dado) : data(dado),BasicTree((
 }
 
 template <typename T> arvore<T>::arvore(list<T> &dados): BasicTree((void*)&data) {
-    if (dados.vazia()) throw -1;
-    dados.inicia();
-    data = dados.proximo();
-    while (! dados.fim()) adiciona(dados.proximo());
+    if (dados.empty()) throw -1;
+    auto it = dados.begin();
+    data = *it;
+    for (;it != dados.end(); it++) {
+        adiciona(*it);
+    }
 }
 
 template <typename T> arvore<T>::arvore(istream &inp): BasicTree((void*)&data) {
