@@ -39,6 +39,8 @@ namespace prglib {
 
         ~arvore_basica();
 
+        arvore_basica& operator=(const arvore_basica<T> & outra);
+
         const T & obtem() const;
         const T & obtem(const T & dado) const;
         bool vazia() const;

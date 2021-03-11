@@ -11,7 +11,7 @@ using prglib::arvore;
  */
 int main(int argc, char** argv) {
     ifstream inp("../tree.txt");
-    arvore<int> a(inp); // cria a árvore e acrescenta a ela os valores contidos no arquivo
+    arvore<int> a(inp), b; // cria a árvore e acrescenta a ela os valores contidos no arquivo
 
     cout << "Valor da raiz: " << a.obtem() << endl;
     cout << "Valor: " << a.obtem(5) << endl;
@@ -25,10 +25,12 @@ int main(int argc, char** argv) {
     a.balanceia();
     cout << "Altura: " << a.altura() << endl;
 
+    b = a;
+    
     // iteração da árvore: obtém os valores em ordem crescente (in-order)
     // note que foi necessário referenciar o ponteiro "a" para
     // poder usar esta forma de iteração
-    for (auto & x: a) {
+    for (auto & x: b) {
         cout << x << ",";
     }
     cout << endl;

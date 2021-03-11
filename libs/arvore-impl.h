@@ -22,7 +22,7 @@ using std::endl;
 
 namespace prglib {
 
-    template <typename T> arvore_basica<T>::arvore_basica() {
+    template <typename T> arvore_basica<T>::arvore_basica():raiz(nullptr) {
 
     }
 
@@ -30,14 +30,8 @@ namespace prglib {
 
     }
 
-    template <typename T> arvore_basica<T>::arvore_basica(const arvore_basica<T>& outra) {
-        if (!outra.vazia()) {
-            auto it = outra.preorder_begin();
-            raiz = new nodo_arvore<T>(it->obtem());
-            for (; it != outra.preorder_end(); it++) {
-                raiz->adiciona(it->obtem());
-            }
-        } else raiz = nullptr;
+    template <typename T> arvore_basica<T>::arvore_basica(const arvore_basica<T>& outra): raiz(nullptr) {
+        *this = outra;
     }
 
     template <typename T> arvore_basica<T>::arvore_basica(const nodo_arvore<T> * ptr) {
@@ -61,6 +55,19 @@ namespace prglib {
             raiz = new nodo_arvore<T>(*it);
             for (it++; it != dados.end(); it++) raiz->adiciona(*it);
         }
+    }
+
+    template <typename T> arvore_basica<T>& arvore_basica<T>::operator=(const arvore_basica<T> & outra) {
+        IF_PTR(raiz) delete raiz;
+        
+        if (!outra.vazia()) {
+            auto it = outra.preorder_begin();
+            raiz = new nodo_arvore<T>(it->obtem());
+            for (; it != outra.preorder_end(); it++) {
+                raiz->adiciona(it->obtem());
+            }
+        } else raiz = nullptr;
+    	return *this;
     }
 
     template <typename T> bool arvore_basica<T>::vazia() const {
@@ -165,6 +172,9 @@ namespace prglib {
             IF_PTR(raiz) {
             return raiz->obtemIntervalo(result, start, end);
         }
+    }
+
+    template <typename T> arvore<T>::arvore(): arvore_basica<T>() {
     }
 
     template <typename T> arvore<T>::arvore(const arvore<T>& outra): arvore_basica<T>(outra) {
