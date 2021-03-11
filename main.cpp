@@ -16,6 +16,15 @@ int main(int argc, char** argv) {
     cout << "Valor da raiz: " << a.obtem() << endl;
     cout << "Valor: " << a.obtem(5) << endl;
 
+    a.adiciona(16);
+    a.adiciona(17);
+    a.adiciona(18);
+    a.adiciona(19);
+//    a.remove(7);
+    cout << "Altura: " << a.altura() << endl;
+    a.balanceia();
+    cout << "Altura: " << a.altura() << endl;
+
     // iteração da árvore: obtém os valores em ordem crescente (in-order)
     // note que foi necessário referenciar o ponteiro "a" para
     // poder usar esta forma de iteração
@@ -41,6 +50,8 @@ int main(int argc, char** argv) {
         cout << x << ", ";
     }
     cout << endl;
+
+    cout << a.obtemMaior() << ", " << a.obtemMenor() << endl;
 
     // Apenas para fins de visualização, a função abaixo desenha uma árvore
     // Ela gera um diagrama no format "dot", que pode então ser gravado em arquivo
