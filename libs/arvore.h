@@ -252,6 +252,8 @@ template <typename T> class nodo_arvore : private BasicTree{
     // balanceia a árvore repetidamente, até que a altura não mais se reduza
     nodo_arvore<T> * balanceia(bool otimo);
 
+    bool folha() const { return esq == nullptr && dir == nullptr;}
+
  protected:
      T data;
      

@@ -200,6 +200,12 @@ namespace prglib {
 
     template <typename T> T arvore<T>::remove(const T &dado) {
         TRY_PROC(this->raiz) {
+            if (this->raiz->folha()) {
+                auto algo = this->raiz->obtem();
+                delete this->raiz;
+                this->raiz = nullptr;
+                return algo;
+            }
             return this->raiz->remove(dado);
         }
     }
@@ -342,7 +348,7 @@ template <typename T> T& nodo_arvore<T>::obtemMenor() const{
 }
 
 template <typename T> T nodo_arvore<T>::remove(const T & algo) {
-    if (not (esq or dir)) throw -1; // tem apenas raiz
+//    if (not (esq or dir)) throw -1; // tem apenas raiz
     
     T coisa;
     BasicTree::remove((void*)&algo, (void*)&coisa);
@@ -414,11 +420,11 @@ template <typename T> void nodo_arvore<T>::destroi(void * p1) {
         if (esq.vazia() and dir.vazia()) out << raiz << endl;
         else {
             if (!esq.vazia()) {
-                out << raiz << " -- " << esq.obtem() << endl;
+                out << '"' << raiz << "\" -- \"" << esq.obtem() << '"' << endl;
                 if (esq.altura()) desenha_nodos(esq, out);
             }
             if (!dir.vazia()) {
-                out << raiz << " -- " << dir.obtem() << endl;
+                out << '"' << raiz << "\" -- \"" << dir.obtem() << '"' << endl;
                 if (dir.altura()) desenha_nodos(dir, out);
             }
         }
