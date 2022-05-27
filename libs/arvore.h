@@ -41,8 +41,16 @@ namespace prglib {
 
         arvore_basica& operator=(const arvore_basica<T> & outra);
 
+        // testa se dado existe na árvore
+        bool existe(const T & dado) const;
+
+        // retorna o valor da raiz. Se árvore vazia dispara exceção
         const T & obtem() const;
+
+        // retorna valor da árvore equivalente a dado
+        // se árvore vazia dispara exceção
         const T & obtem(const T & dado) const;
+        
         bool vazia() const;
 
         // iteradores PRE-ORDER e IN-ORDER

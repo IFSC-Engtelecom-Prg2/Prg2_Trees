@@ -10,7 +10,7 @@ using prglib::arvore;
  *
  */
 int main(int argc, char** argv) {
-    ifstream inp("../tree.txt");
+    ifstream inp("tree.txt");
     arvore<int> a(inp), b; // cria a árvore e acrescenta a ela os valores contidos no arquivo
 
     cout << "Valor da raiz: " << a.obtem() << endl;
@@ -20,6 +20,14 @@ int main(int argc, char** argv) {
     a.adiciona(17);
     a.adiciona(18);
     a.adiciona(19);
+
+   if (a.existe(18)) {
+      cout << 18 << " existe" << endl;
+   }
+   if (! a.existe(14)) {
+      cout << 14 << " não existe" << endl;
+   }
+
 //    a.remove(7);
     cout << "Altura: " << a.altura() << endl;
     a.balanceia();

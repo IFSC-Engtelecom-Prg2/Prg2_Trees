@@ -70,6 +70,18 @@ namespace prglib {
     	return *this;
     }
 
+    template <typename T> bool arvore_basica<T>::existe(const T & dado) const {
+        bool status = false;
+        if (! vazia()) {
+            try {
+                raiz->obtem(dado);
+                status=true;
+            } catch (...) {            
+            }
+        }
+        return status;
+    }
+
     template <typename T> bool arvore_basica<T>::vazia() const {
         return raiz == nullptr;
     }
