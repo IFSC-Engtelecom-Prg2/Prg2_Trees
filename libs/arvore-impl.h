@@ -10,6 +10,7 @@
 
 #include <sstream>
 #include <ostream>
+#include <stdexcept>
 
 using std::ostream;
 using std::ostringstream;
@@ -17,7 +18,7 @@ using std::endl;
 
 #define IF_PTR(p) if (this->p != nullptr)
 
-#define TRY_PROC(p) if (p == nullptr) throw -1; \
+#define TRY_PROC(p) if (p == nullptr) throw std::runtime_error("árvore vazia"); \
                  else
 
 namespace prglib {
@@ -43,7 +44,7 @@ namespace prglib {
         T data;
 
         inp >> data;
-        if (inp.fail()) throw -1;
+        if (inp.fail()) throw std::runtime_error("não pode ler da stream");
         raiz = new nodo_arvore<T>(data);
 
         while (inp >> data) raiz->adiciona(data);
@@ -512,13 +513,13 @@ template <typename T> void nodo_arvore<T>::destroi(void * p1) {
 
     template<typename T>
     const T &arvore_basica<T>::preorder_iterator::operator*() const {
-        if (p.empty()) throw -1; // a meu critério ???
+        if (p.empty()) throw std::runtime_error("fim da iteração"); // a meu critério ???
         auto ptr = p.top();
         return ptr->obtem();
     }
 
     template <typename T> const nodo_arvore<T>* arvore_basica<T>::preorder_iterator::operator->() const {
-        if (p.empty()) throw -1;
+        if (p.empty()) throw std::runtime_error("fim da iteração");
         auto ptr = p.top();
         return ptr;
     }
