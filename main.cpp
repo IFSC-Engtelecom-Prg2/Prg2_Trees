@@ -25,6 +25,11 @@ int main(int argc, char** argv) {
     auto a = prglib::cria_arvore_esp<Algo>(comp_algo, la);
     auto b = prglib::cria_arvore_esp<Algo>(comp_algo);
 
+//    b = a;
+
+    for (auto & v: a) {
+        cout << v.num << ", " << v.nome << endl;
+    }
     /*
     cout << "Valor da raiz: " << a.obtem() << endl;
     cout << "Valor: " << a.obtem(5) << endl;

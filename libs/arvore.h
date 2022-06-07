@@ -31,7 +31,7 @@ namespace prglib {
     // Esta classe implementa as funcionalidades básicas, que não alteram a árvore
     // Isso possibilita que seus objetos compartilhem nodos (com limitações)
     template <typename T> int default_compare(const T & x1, const T & x2) {
-        return x1<x2?-1:x1==x2;
+        return x1<x2?-1:x1!=x2;
     }
 
     template <typename T, typename Compare> class arvore_basica {
