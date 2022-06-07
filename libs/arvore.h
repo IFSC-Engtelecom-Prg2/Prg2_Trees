@@ -30,16 +30,18 @@ namespace prglib {
     // Uma arvore de pesquisa binária com operações que não modificam sua estrutura
     // Esta classe implementa as funcionalidades básicas, que não alteram a árvore
     // Isso possibilita que seus objetos compartilhem nodos (com limitações)
-    template <typename T> class arvore_basica {
+    template <typename T> bool default_compare(const T & x1, const T & x2) {return x1 < x2;}
+
+    template <typename T, typename Compare> class arvore_basica {
     public:
-        arvore_basica();
-        arvore_basica(const arvore_basica<T> & outra);
-        arvore_basica(list<T> & dados);
-        arvore_basica(istream & inp);
+        arvore_basica(Compare compare=default_compare<T>);
+        arvore_basica(const arvore_basica<T,Compare> & outra);
+        arvore_basica(list<T> & dados, Compare compare=default_compare<T>);
+        arvore_basica(istream & inp, Compare compare=default_compare<T>);
 
         ~arvore_basica();
 
-        arvore_basica& operator=(const arvore_basica<T> & outra);
+        arvore_basica& operator=(const arvore_basica<T,Compare> & outra);
 
         // testa se dado existe na árvore
         bool existe(const T & dado) const;
@@ -89,11 +91,11 @@ namespace prglib {
         // Se o ramo esquerdo desta árvore for destruído,
         // a árvore retornada fica inválida ... se for usada depois disso,
         // um erro de acesso à memória ocorrerá
-        const arvore_basica<T> esquerda() const;
+        const arvore_basica<T,Compare> esquerda() const;
 
         // retorna a subárvore direita
         // mesmas restrições que "esquerda()"
-        const arvore_basica<T> direita() const;
+        const arvore_basica<T,Compare> direita() const;
 
         // retorna o menor dado
         const T & obtemMenor() const;
@@ -118,8 +120,9 @@ namespace prglib {
 
     protected:
         nodo_arvore<T> * raiz;
+        Compare comp_func;
 
-        arvore_basica(const nodo_arvore<T> * ptr);
+        arvore_basica(const nodo_arvore<T> * ptr, Compare compare);
     public:
         class preorder_iterator: public forward_iterator_tag {
         public:
@@ -174,12 +177,12 @@ namespace prglib {
 
     // Uma árvore de pesquisa binária que pode ser modificada
     // Esta árvore estende arvore_basica com operações que modificam sua estrutura
-    template <typename T> class arvore : public arvore_basica<T> {
+    template <typename T, typename Compare> class arvore : public arvore_basica<T,Compare> {
     public:
-        arvore();
-        arvore(const arvore<T> & outra);
-        arvore(list<T> & dados);
-        arvore(istream & inp);
+        arvore(Compare compare=default_compare<T>);
+        arvore(const arvore<T,Compare> & outra);
+        arvore(list<T> & dados, Compare compare=default_compare<T>);
+        arvore(istream & inp, Compare compare=default_compare<T>);
         ~arvore();
 
         void adiciona(const T & dado);
@@ -288,7 +291,16 @@ template <typename T> class nodo_arvore : private BasicTree{
 // gera uma descrição de um diagrama DOT para a árvore
 // O resultado deve ser gravado em arquivo para se gerar o diagrama
 // com o programa "dot" ou "dotty"
-template <typename T> string desenha_arvore(const arvore_basica<T> & arv);
+template <typename T, typename Compare> string desenha_arvore(const arvore_basica<T,Compare> & arv);
+
+
+    template <typename T, typename Compare, typename ...Args> decltype(auto) cria_arvore2(Compare f=default_compare<T>, Args&... args) {
+        return arvore<T,Compare>(args..., f);
+    }
+
+    template <typename T, typename... Args> decltype(auto) cria_arvore(Args&... args) {
+        return cria_arvore2<T>(default_compare<T>, args...);
+    }
 
 } // fim do namespace
 

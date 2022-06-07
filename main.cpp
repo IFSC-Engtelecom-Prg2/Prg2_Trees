@@ -11,7 +11,9 @@ using prglib::arvore;
  */
 int main(int argc, char** argv) {
     ifstream inp("tree.txt");
-    arvore<int> a(inp), b; // cria a árvore e acrescenta a ela os valores contidos no arquivo
+//    arvore<int> a(inp), b; // cria a árvore e acrescenta a ela os valores contidos no arquivo
+    auto a = prglib::cria_arvore<int>(inp);
+    auto b = prglib::cria_arvore<int>();
 
     cout << "Valor da raiz: " << a.obtem() << endl;
     cout << "Valor: " << a.obtem(5) << endl;
