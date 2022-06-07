@@ -410,14 +410,14 @@ template <typename T> void nodo_arvore<T>::atribui(void * p1, void * p2) {
 template <typename T> bool nodo_arvore<T>::ehIgual(void * p1, void * p2) {
     T * o1 = (T*)p1;
     T * o2 = (T*)p2;
-    return *o1 == *o2;
+    return comp_func(*o1,*o2) == 0;
 }
     
     // comparação de precedência: *p1 < *p2
 template <typename T> bool nodo_arvore<T>::ehMenor(void * p1, void * p2) {
     T * o1 = (T*)p1;
     T * o2 = (T*)p2;
-    return *o1 < *o2;
+    return comp_func(*o1,*o2) < 0;
 }
     // destroi dado
 template <typename T> void nodo_arvore<T>::destroi(void * p1) {

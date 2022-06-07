@@ -30,7 +30,7 @@ namespace prglib {
     // Uma arvore de pesquisa binária com operações que não modificam sua estrutura
     // Esta classe implementa as funcionalidades básicas, que não alteram a árvore
     // Isso possibilita que seus objetos compartilhem nodos (com limitações)
-    template <typename T> bool default_compare(const T & x1, const T & x2) {
+    template <typename T> int default_compare(const T & x1, const T & x2) {
         return x1<x2?-1:x1==x2;
     }
 
@@ -302,6 +302,10 @@ template <typename T, typename Compare> string desenha_arvore(const arvore_basic
 
     template <typename T, typename... Args> decltype(auto) cria_arvore(Args&... args) {
         return cria_arvore2<T>(default_compare<T>, args...);
+    }
+
+    template <typename T, typename Compare, typename... Args> decltype(auto) cria_arvore_esp(Compare func, Args&... args) {
+        return cria_arvore2<T>(func, args...);
     }
 
 } // fim do namespace

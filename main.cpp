@@ -9,12 +9,23 @@ using prglib::arvore;
 /*
  *
  */
+struct Algo {
+    int num;
+    string nome;
+};
+
+int comp_algo(const Algo & a1, const Algo & a2) {
+   return prglib::default_compare(a1.num, a2.num);
+}
+
 int main(int argc, char** argv) {
     ifstream inp("tree.txt");
 //    arvore<int> a(inp), b; // cria a árvore e acrescenta a ela os valores contidos no arquivo
-    auto a = prglib::cria_arvore<int>(inp);
-    auto b = prglib::cria_arvore<int>();
+    list<Algo> la = {{1,"um"}, {5, "cinco"}, {-1, "neg"}};
+    auto a = prglib::cria_arvore_esp<Algo>(comp_algo, la);
+    auto b = prglib::cria_arvore_esp<Algo>(comp_algo);
 
+    /*
     cout << "Valor da raiz: " << a.obtem() << endl;
     cout << "Valor: " << a.obtem(5) << endl;
 
@@ -75,4 +86,5 @@ int main(int argc, char** argv) {
     diag.close();
 
     return 0;
+     */
 }
