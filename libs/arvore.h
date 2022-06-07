@@ -25,7 +25,7 @@ using std::queue;
 
 namespace prglib {
     
-    template <typename T> class nodo_arvore;
+    template <typename T,typename Compare> class nodo_arvore;
 
     // Uma arvore de pesquisa binária com operações que não modificam sua estrutura
     // Esta classe implementa as funcionalidades básicas, que não alteram a árvore
@@ -121,33 +121,33 @@ namespace prglib {
         int fatorB() const;
 
     protected:
-        nodo_arvore<T> * raiz;
+        nodo_arvore<T,Compare> * raiz;
         Compare comp_func;
 
-        arvore_basica(const nodo_arvore<T> * ptr, Compare compare);
+        arvore_basica(const nodo_arvore<T,Compare> * ptr, Compare compare);
     public:
         class preorder_iterator: public forward_iterator_tag {
         public:
             preorder_iterator();
             preorder_iterator(const preorder_iterator & it);
-            preorder_iterator(const nodo_arvore<T> * raiz);
+            preorder_iterator(const nodo_arvore<T,Compare> * raiz);
             ~preorder_iterator() {}
 
             bool operator==(const preorder_iterator & it) const;
             bool operator!=(const preorder_iterator & it) const;
-            const nodo_arvore<T>* operator->() const;
+            const nodo_arvore<T,Compare>* operator->() const;
             const T& operator*() const;
             virtual preorder_iterator& operator++();
             virtual preorder_iterator& operator++(int);
         protected:
-            stack<const nodo_arvore<T>*> p;
+            stack<const nodo_arvore<T,Compare>*> p;
         };
 
         class inorder_iterator: public preorder_iterator {
         public:
             inorder_iterator();
             inorder_iterator(const inorder_iterator & it);
-            inorder_iterator(const nodo_arvore<T> * raiz);
+            inorder_iterator(const nodo_arvore<T,Compare> * raiz);
             ~inorder_iterator() {}
 
             virtual inorder_iterator& operator++();
@@ -158,7 +158,7 @@ namespace prglib {
         public:
             preorder_riterator();
             preorder_riterator(const preorder_riterator & it);
-            preorder_riterator(const nodo_arvore<T> * raiz);
+            preorder_riterator(const nodo_arvore<T,Compare> * raiz);
             ~preorder_riterator() {}
 
             virtual preorder_riterator& operator++();
@@ -169,7 +169,7 @@ namespace prglib {
         public:
             inorder_riterator();
             inorder_riterator(const inorder_riterator & it);
-            inorder_riterator(const nodo_arvore<T> * raiz);
+            inorder_riterator(const nodo_arvore<T,Compare> * raiz);
             ~inorder_riterator() {}
 
             virtual inorder_riterator& operator++();
@@ -198,11 +198,11 @@ namespace prglib {
 
     };
 
-template <typename T> class nodo_arvore : private BasicTree{
+template <typename T,typename Compare> class nodo_arvore : private BasicTree{
  public:
-  nodo_arvore();
-  //nodo_arvore(const nodo_arvore<T> & outra);
-  nodo_arvore(const T & dado);
+  nodo_arvore(Compare &func);
+  //nodo_arvore(const nodo_arvore<T,Compare> & outra);
+  nodo_arvore(const T & dado, Compare &func);
 
   virtual ~nodo_arvore();
 
@@ -225,10 +225,10 @@ template <typename T> class nodo_arvore : private BasicTree{
     unsigned int tamanho() const;
 
     // retorna a subárvore esquerda
-    const nodo_arvore<T> * esquerda() const;
+    const nodo_arvore<T,Compare> * esquerda() const;
 
     // retorna a subárvore direita
-    const nodo_arvore<T> * direita() const;
+    const nodo_arvore<T,Compare> * direita() const;
 
     // itera a árvore de forma reversa
 //  void iniciaPeloFim();
@@ -260,15 +260,16 @@ template <typename T> class nodo_arvore : private BasicTree{
     int fatorB() ;
 
     // balanceia a árvore
-    nodo_arvore<T> * balanceia();
+    nodo_arvore<T,Compare> * balanceia();
 
     // balanceia a árvore repetidamente, até que a altura não mais se reduza
-    nodo_arvore<T> * balanceia(bool otimo);
+    nodo_arvore<T,Compare> * balanceia(bool otimo);
 
     bool folha() const { return esq == nullptr && dir == nullptr;}
 
  protected:
      T data;
+    Compare & comp_func;
      
     // atribuição: *p1 <- *p2
     virtual void atribui(void * p1, void * p2);
@@ -283,8 +284,8 @@ template <typename T> class nodo_arvore : private BasicTree{
 
     void copia_lista(list<void*> l, list<T> & res);
     
-  nodo_arvore<T> * rotacionaL();
-  nodo_arvore<T> * rotacionaR();
+  nodo_arvore<T,Compare> * rotacionaL();
+  nodo_arvore<T,Compare> * rotacionaR();
 
 };
 
