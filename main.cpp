@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <list>
+#include <vector>
 #include <prglib.h>
 
 using namespace std;
@@ -10,8 +12,9 @@ using prglib::arvore;
  *
  */
 int main(int argc, char** argv) {
-    list<int> l = {5,3,2,4,8,6,9};
-    auto a = prglib::cria_arvore<int>(l);
+    vector<int> v = {5,3,2,4,8,6,9};
+    list<int> l;
+    auto a = prglib::cria_arvore<int>(v);
     auto b = prglib::cria_arvore<int>();
 
     cout << "Valor da raiz: " << a.obtem() << endl;

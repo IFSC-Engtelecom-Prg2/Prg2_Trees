@@ -50,7 +50,7 @@ namespace prglib {
         while (inp >> data) raiz->adiciona(data);
     }
 
-    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(list<T> &dados,Compare compare): comp_func(compare) {
+    template <typename T, typename Compare> template <typename Container> arvore_basica<T,Compare>::arvore_basica(Container &dados,Compare compare): comp_func(compare) {
         if (! dados.empty()) {
             auto it = dados.begin();
             raiz = new nodo_arvore<T,Compare>(*it,this->comp_func);
@@ -193,7 +193,7 @@ namespace prglib {
     template <typename T, typename Compare> arvore<T,Compare>::arvore(const arvore<T,Compare>& outra): arvore_basica<T,Compare>(outra) {
     }
 
-    template <typename T, typename Compare> arvore<T,Compare>::arvore(list<T> &dados, Compare compare): arvore_basica<T,Compare>(dados, compare) {}
+    template <typename T, typename Compare> template <typename Container> arvore<T,Compare>::arvore(Container &dados, Compare compare): arvore_basica<T,Compare>(dados, compare) {}
 
     template <typename T, typename Compare> arvore<T,Compare>::arvore(istream &inp, Compare compare): arvore_basica<T,Compare>(inp, compare) {}
 

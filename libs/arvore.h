@@ -43,7 +43,7 @@ namespace prglib {
     public:
         arvore_basica(Compare compare);
         arvore_basica(const arvore_basica<T,Compare> & outra);
-        arvore_basica(list<T> & dados, Compare compare);
+        template <typename Container> arvore_basica(Container & dados, Compare compare);
         arvore_basica(istream & inp, Compare compare);
 
         ~arvore_basica();
@@ -188,7 +188,7 @@ namespace prglib {
     public:
         arvore(Compare compare);
         arvore(const arvore<T,Compare> & outra);
-        arvore(list<T> & dados, Compare compare);
+        template <typename Container> arvore(Container & dados, Compare compare);
         arvore(istream & inp, Compare compare);
         ~arvore();
 
