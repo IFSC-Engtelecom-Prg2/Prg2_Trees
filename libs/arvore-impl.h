@@ -103,7 +103,7 @@ namespace prglib {
         IF_PTR(raiz) {
             return arvore_basica(raiz->direita(), comp_func);
         } else {
-            return arvore_basica();
+            return arvore_basica(comp_func);
         }
     }
 
@@ -111,7 +111,7 @@ namespace prglib {
         IF_PTR(raiz) {
             return arvore_basica(raiz->esquerda(), comp_func);
         } else {
-            return arvore_basica();
+            return arvore_basica(comp_func);
         }
     }
 

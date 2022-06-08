@@ -27,13 +27,18 @@ namespace prglib {
     
     template <typename T,typename Compare> class nodo_arvore;
 
-    // Uma arvore de pesquisa binária com operações que não modificam sua estrutura
-    // Esta classe implementa as funcionalidades básicas, que não alteram a árvore
-    // Isso possibilita que seus objetos compartilhem nodos (com limitações)
+    // Uma função default para comparação de valores ordenáveis, usada pela árvore
+    // Resultados:
+    // -1: se x1 < x2
+    // 1: se x1 > x2
+    // 0: se x1 == x2
     template <typename T> int default_compare(const T & x1, const T & x2) {
         return x1<x2?-1:x1!=x2;
     }
 
+    // Uma arvore de pesquisa binária com operações que não modificam sua estrutura
+    // Esta classe implementa as funcionalidades básicas, que não alteram a árvore
+    // Isso possibilita que seus objetos compartilhem nodos (com limitações)
     template <typename T, typename Compare> class arvore_basica {
     public:
         arvore_basica(Compare compare);
