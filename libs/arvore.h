@@ -36,10 +36,10 @@ namespace prglib {
 
     template <typename T, typename Compare> class arvore_basica {
     public:
-        arvore_basica(Compare compare=default_compare<T>);
+        arvore_basica(Compare compare);
         arvore_basica(const arvore_basica<T,Compare> & outra);
-        arvore_basica(list<T> & dados, Compare compare=default_compare<T>);
-        arvore_basica(istream & inp, Compare compare=default_compare<T>);
+        arvore_basica(list<T> & dados, Compare compare);
+        arvore_basica(istream & inp, Compare compare);
 
         ~arvore_basica();
 
@@ -181,10 +181,10 @@ namespace prglib {
     // Esta árvore estende arvore_basica com operações que modificam sua estrutura
     template <typename T, typename Compare> class arvore : public arvore_basica<T,Compare> {
     public:
-        arvore(Compare compare=default_compare<T>);
+        arvore(Compare compare);
         arvore(const arvore<T,Compare> & outra);
-        arvore(list<T> & dados, Compare compare=default_compare<T>);
-        arvore(istream & inp, Compare compare=default_compare<T>);
+        arvore(list<T> & dados, Compare compare);
+        arvore(istream & inp, Compare compare);
         ~arvore();
 
         void adiciona(const T & dado);
@@ -297,7 +297,7 @@ template <typename T,typename Compare> class nodo_arvore : private BasicTree{
 template <typename T, typename Compare> string desenha_arvore(const arvore_basica<T,Compare> & arv);
 
 
-    template <typename T, typename Compare, typename ...Args> decltype(auto) cria_arvore2(Compare f=default_compare<T>, Args&... args) {
+    template <typename T, typename Compare, typename ...Args> decltype(auto) cria_arvore2(Compare f, Args&... args) {
         return arvore<T,Compare>(args..., f);
     }
 
