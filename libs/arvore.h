@@ -85,10 +85,10 @@ namespace prglib {
 
         // Versão alternativa: enumera os dados in-order, pre-order, post-order e breadth-first
         // copiando-os para uma lista
-        void listeInOrder(list<T> & result);
-        void listePreOrder(list<T> & result);
-        void listePostOrder(list<T> & result);
-        void listeEmLargura(list<T> & result);
+        template <typename Container> void listeInOrder(Container & result);
+        template <typename Container> void listePreOrder(Container & result);
+        template <typename Container> void listePostOrder(Container & result);
+        template <typename Container> void listeEmLargura(Container & result);
 
         // retorna a quantidade de dados na árvore
         unsigned int tamanho() const;
@@ -221,10 +221,10 @@ template <typename T,typename Compare> class nodo_arvore : private BasicTree{
   const T& obtem() const ;
     // Versão alternativa: enumera os dados in-order, pre-order, post-order e breadth-first
     // copiando-os para uma lista
-    void listeInOrder(list<T> & result);
-    void listePreOrder(list<T> & result);
-    void listePostOrder(list<T> & result);
-    void listeEmLargura(list<T> & result);
+    template <typename Container> void listeInOrder(Container & result);
+    template <typename Container> void listePreOrder(Container & result);
+    template <typename Container> void listePostOrder(Container & result);
+    template <typename Container> void listeEmLargura(Container & result);
 
     // retorna a quantidade de dados na árvore
     unsigned int tamanho() const;
@@ -287,7 +287,7 @@ template <typename T,typename Compare> class nodo_arvore : private BasicTree{
     
     virtual BasicTree * create(void * p_dado);
 
-    void copia_lista(list<void*> l, list<T> & res);
+    template <typename Container> void copia_lista(list<void*> l, Container & res);
     
   nodo_arvore<T,Compare> * rotacionaL();
   nodo_arvore<T,Compare> * rotacionaR();

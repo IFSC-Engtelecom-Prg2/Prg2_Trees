@@ -145,25 +145,25 @@ namespace prglib {
         }
     }
 
-    template <typename T, typename Compare> void arvore_basica<T,Compare>::listeInOrder(list<T> &result) {
+    template <typename T, typename Compare> template <typename Container> void arvore_basica<T,Compare>::listeInOrder(Container &result) {
         IF_PTR(raiz) {
             return raiz->listeInOrder(result);
         }
     }
 
-    template <typename T, typename Compare> void arvore_basica<T,Compare>::listePreOrder(list<T> &result) {
+    template <typename T, typename Compare> template <typename Container> void arvore_basica<T,Compare>::listePreOrder(Container &result) {
         IF_PTR(raiz) {
             return raiz->listePreOrder(result);
         }
     }
 
-    template <typename T, typename Compare> void arvore_basica<T,Compare>::listePostOrder(list<T> &result) {
+    template <typename T, typename Compare> template <typename Container> void arvore_basica<T,Compare>::listePostOrder(Container &result) {
         IF_PTR(raiz) {
             return raiz->listePostOrder(result);
         }
     }
 
-    template <typename T, typename Compare> void arvore_basica<T,Compare>::listeEmLargura(list<T> &result) {
+    template <typename T, typename Compare> template <typename Container> void arvore_basica<T,Compare>::listeEmLargura(Container &result) {
         IF_PTR(raiz) {
             return raiz->listeEmLargura(result);
         }
@@ -273,34 +273,34 @@ template <typename T,typename Compare> const nodo_arvore<T,Compare> * nodo_arvor
     return static_cast<const nodo_arvore<T,Compare>*>(this->dir);
 }
 
-template <typename T,typename Compare> void nodo_arvore<T,Compare>::listeEmLargura(list<T> & result) {
+template <typename T,typename Compare> template <typename Container> void nodo_arvore<T,Compare>::listeEmLargura(Container & result) {
     list<void*> l;
     
     BasicTree::listeEmLargura(l);
     copia_lista(l , result);
 }
 
-template <typename T,typename Compare> void nodo_arvore<T,Compare>::listeInOrder(list<T> & result) {
+template <typename T,typename Compare> template <typename Container> void nodo_arvore<T,Compare>::listeInOrder(Container & result) {
     list<void*> l;
     
     BasicTree::listeInOrder(l);
     copia_lista(l , result);
 }
 
-template <typename T,typename Compare> void nodo_arvore<T,Compare>::copia_lista(list<void*> l, list<T> & res) {
+template <typename T,typename Compare> template <typename Container> void nodo_arvore<T,Compare>::copia_lista(list<void*> l, Container & res) {
     for (auto & x: l) {
         res.push_back(*(T*)x);
     }
 }
 
-template <typename T,typename Compare> void nodo_arvore<T,Compare>::listePreOrder(list<T> & result) {
+template <typename T,typename Compare> template <typename Container> void nodo_arvore<T,Compare>::listePreOrder(Container & result) {
     list<void*> l;
     
     BasicTree::listePreOrder(l);
     copia_lista(l , result);
 }
 
-template <typename T,typename Compare> void nodo_arvore<T,Compare>::listePostOrder(list<T> & result) {
+template <typename T,typename Compare> template <typename Container> void nodo_arvore<T,Compare>::listePostOrder(Container & result) {
     list<void*> l;
     
     BasicTree::listePostOrder(l);
