@@ -15,6 +15,8 @@
 #include <iterator>
 #include <stack>
 #include <queue>
+#include <memory>
+#include "nodo_arvore.h"
 
 using std::string;
 using std::istream;
@@ -129,7 +131,7 @@ namespace prglib {
         int fatorB() const;
 
     protected:
-        nodo_arvore<T,Compare> * raiz;
+        std::unique_ptr<nodo_arvore<T,Compare>> raiz;
         Compare comp_func;
 
         arvore_basica(const nodo_arvore<T,Compare> * ptr, Compare compare);
@@ -205,98 +207,6 @@ namespace prglib {
         void balanceia(bool otimo);
 
     };
-
-template <typename T,typename Compare> class nodo_arvore : private BasicTree{
- public:
-  nodo_arvore(Compare &func);
-  //nodo_arvore(const nodo_arvore<T,Compare> & outra);
-  nodo_arvore(const T & dado, Compare &func);
-
-  virtual ~nodo_arvore();
-
-  // adiciona um dado à árvore
-  void adiciona(const T& algo);
-
-  // obtém um dado da árvore
-  const T& obtem(const T & algo) const;
-
-  // obtém o valor da raiz da árvore
-  const T& obtem() const ;
-    // Versão alternativa: enumera os dados in-order, pre-order, post-order e breadth-first
-    // copiando-os para uma lista
-    template <typename Container> void listeInOrder(Container & result);
-    template <typename Container> void listePreOrder(Container & result);
-    template <typename Container> void listePostOrder(Container & result);
-    template <typename Container> void listeEmLargura(Container & result);
-
-    // retorna a quantidade de dados na árvore
-    unsigned int tamanho() const;
-
-    // retorna a subárvore esquerda
-    const nodo_arvore<T,Compare> * esquerda() const;
-
-    // retorna a subárvore direita
-    const nodo_arvore<T,Compare> * direita() const;
-
-    // itera a árvore de forma reversa
-//  void iniciaPeloFim();
-//  bool inicio();
-//  T& anterior();
-
-    // remove um dado
-    T remove(const T & algo);
-
-    // retorna o menor dado
-    T & obtemMenor() const;
-
-    // retorna o maior dado
-    T & obtemMaior() const;
-
-    // copia na lista "result" os dados menores que "algo"
-    void obtemMenoresQue(list<T> & result, const T & algo);
-
-    // copia na lista "result" os dados maiores que "algo"
-    void obtemMaioresQue(list<T> & result, const T & algo);
-
-    // obtém todos valores entre "start" e "end" (inclusive)
-    void obtemIntervalo(list<T> & result, const T & start, const T & end);
-
-    // retorna a altura da folha mais distante da raiz
-    unsigned int altura() ;
-
-    // retorna o fator de balanceamento
-    int fatorB() ;
-
-    // balanceia a árvore
-    nodo_arvore<T,Compare> * balanceia();
-
-    // balanceia a árvore repetidamente, até que a altura não mais se reduza
-    nodo_arvore<T,Compare> * balanceia(bool otimo);
-
-    bool folha() const { return esq == nullptr && dir == nullptr;}
-
- protected:
-     T data;
-    Compare & comp_func;
-     
-    // atribuição: *p1 <- *p2
-    virtual void atribui(void * p1, void * p2);
-    // compararação de igualdade
-    virtual bool ehIgual(void * p1, void * p2);
-    // comparação de precedência: *p1 < *p2
-    virtual bool ehMenor(void * p1, void * p2);
-    // destroi dado
-    virtual void destroi(void * p1);
-    
-    virtual BasicTree * create(void * p_dado);
-
-    template <typename Container> void copia_lista(list<void*> l, Container & res);
-    
-  nodo_arvore<T,Compare> * rotacionaL();
-  nodo_arvore<T,Compare> * rotacionaR();
-
-};
-
 
 
 // gera uma descrição de um diagrama DOT para a árvore
