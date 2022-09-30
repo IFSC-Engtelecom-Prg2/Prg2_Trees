@@ -33,9 +33,7 @@ namespace prglib {
         *this = outra;
     }
 
-    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(const nodo_arvore<T,Compare> * ptr, Compare compare): comp_func(compare) {
-        nodo_arvore<T,Compare> * p = (nodo_arvore<T,Compare>*)ptr;
-        raiz = p;
+    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(const nodo_arvore<T,Compare> * ptr, Compare compare): comp_func(compare),raiz(ptr) {
     }
 
     template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(istream &inp,Compare compare): comp_func(compare) {
@@ -43,7 +41,7 @@ namespace prglib {
 
         inp >> data;
         if (inp.fail()) throw std::runtime_error("não pode ler da stream");
-        raiz = std::make_unique<nodo_arvore<T,Compare>>(data,this->comp_func);
+        raiz = std::make_shared<nodo_arvore<T,Compare>>(data,this->comp_func);
 
         while (inp >> data) raiz->adiciona(data);
     }
@@ -51,7 +49,7 @@ namespace prglib {
     template <typename T, typename Compare> template <typename Container> arvore_basica<T,Compare>::arvore_basica(Container &dados,Compare compare): comp_func(compare) {
         if (! dados.empty()) {
             auto it = dados.begin();
-            raiz = std::make_unique<nodo_arvore<T,Compare>>(*it,this->comp_func);
+            raiz = std::make_shared<nodo_arvore<T,Compare>>(*it,this->comp_func);
             for (it++; it != dados.end(); it++) raiz->adiciona(*it);
         }
     }
@@ -60,7 +58,7 @@ namespace prglib {
         if (!outra.vazia()) {
             auto it = outra.preorder_begin();
             this->comp_func = outra.comp_func;
-            raiz = std::make_unique<nodo_arvore<T,Compare>>(it->obtem(),this->comp_func);
+            raiz = std::make_shared<nodo_arvore<T,Compare>>(it->obtem(),this->comp_func);
             for (; it != outra.preorder_end(); it++) {
                 raiz->adiciona(it->obtem());
             }

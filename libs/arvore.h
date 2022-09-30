@@ -131,7 +131,7 @@ namespace prglib {
         int fatorB() const;
 
     protected:
-        std::unique_ptr<nodo_arvore<T,Compare>> raiz;
+        std::shared_ptr<nodo_arvore<T,Compare>> raiz;
         Compare comp_func;
 
         arvore_basica(const nodo_arvore<T,Compare> * ptr, Compare compare);
