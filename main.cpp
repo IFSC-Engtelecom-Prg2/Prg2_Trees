@@ -2,6 +2,7 @@
 #include <fstream>
 #include <list>
 #include <vector>
+#include <set>
 #include <prglib.h>
 
 using namespace std;
