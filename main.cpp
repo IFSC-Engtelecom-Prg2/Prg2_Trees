@@ -33,10 +33,10 @@ int main(int argc, char** argv) {
       cout << 14 << " não existe" << endl;
    }
 
-    a.remove(5);
-    cout << "Altura: " << a.altura() << endl;
-    a.balanceia();
-    cout << "Altura: " << a.altura() << endl;
+//    a.remove(5);
+//    cout << "Altura: " << a.altura() << endl;
+//    a.balanceia();
+//    cout << "Altura: " << a.altura() << endl;
 
     // copia a árvore
     b = a;

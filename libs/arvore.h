@@ -134,7 +134,7 @@ namespace prglib {
         std::shared_ptr<nodo_arvore<T,Compare>> raiz;
         Compare comp_func;
 
-        arvore_basica(const nodo_arvore<T,Compare> * ptr, Compare compare);
+        arvore_basica(nodo_arvore<T,Compare> * ptr, Compare compare);
     public:
         class preorder_iterator: public forward_iterator_tag {
         public:

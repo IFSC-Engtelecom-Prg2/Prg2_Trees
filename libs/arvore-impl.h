@@ -33,7 +33,8 @@ namespace prglib {
         *this = outra;
     }
 
-    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(const nodo_arvore<T,Compare> * ptr, Compare compare): comp_func(compare),raiz(ptr) {
+    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(nodo_arvore<T,Compare> * ptr, Compare compare): comp_func(compare) {
+        raiz.reset(ptr);
     }
 
     template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(istream &inp,Compare compare): comp_func(compare) {
@@ -79,7 +80,7 @@ namespace prglib {
     }
 
     template <typename T, typename Compare> bool arvore_basica<T,Compare>::vazia() const {
-        return raiz;
+        return (bool)raiz;
     }
 
     template <typename T, typename Compare> const T& arvore_basica<T,Compare>::obtem() const {
@@ -96,7 +97,8 @@ namespace prglib {
 
     template <typename T, typename Compare> const arvore_basica<T,Compare> arvore_basica<T,Compare>::direita() const {
         if (raiz) {
-            return arvore_basica(raiz->direita(), comp_func);
+            auto nodo = const_cast<nodo_arvore<T,Compare>*>(raiz->direita());
+            return arvore_basica(nodo, comp_func);
         } else {
             return arvore_basica(comp_func);
         }
@@ -104,7 +106,8 @@ namespace prglib {
 
     template <typename T, typename Compare> const arvore_basica<T,Compare> arvore_basica<T,Compare>::esquerda() const {
         if (raiz) {
-            return arvore_basica(raiz->esquerda(), comp_func);
+            auto nodo = const_cast<nodo_arvore<T,Compare>*>(raiz->esquerda());
+            return arvore_basica(nodo, comp_func);
         } else {
             return arvore_basica(comp_func);
         }
@@ -257,7 +260,7 @@ namespace prglib {
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::preorder_iterator arvore_basica<T,Compare>::preorder_begin() const{
-        return preorder_iterator(this->raiz);
+        return preorder_iterator(this->raiz.get());
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::preorder_iterator arvore_basica<T,Compare>::preorder_end() const {
@@ -265,7 +268,7 @@ namespace prglib {
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::inorder_iterator arvore_basica<T,Compare>::inorder_begin() const{
-        return inorder_iterator(this->raiz);
+        return inorder_iterator(this->raiz.get());
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::inorder_iterator arvore_basica<T,Compare>::inorder_end() const {
@@ -273,7 +276,7 @@ namespace prglib {
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::preorder_riterator arvore_basica<T,Compare>::preorder_rbegin() const {
-        return preorder_riterator(this->raiz);
+        return preorder_riterator(this->raiz.get());
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::preorder_riterator arvore_basica<T,Compare>::preorder_rend() const {
@@ -281,7 +284,7 @@ namespace prglib {
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::inorder_riterator arvore_basica<T,Compare>::inorder_rbegin() const{
-        return inorder_riterator(this->raiz);
+        return inorder_riterator(this->raiz.get());
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::inorder_riterator arvore_basica<T,Compare>::inorder_rend() const {
