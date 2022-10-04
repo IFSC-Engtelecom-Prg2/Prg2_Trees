@@ -35,8 +35,8 @@ int main(int argc, char** argv) {
 
 //    a.remove(5);
 //    cout << "Altura: " << a.altura() << endl;
-//    a.balanceia();
-//    cout << "Altura: " << a.altura() << endl;
+    a.balanceia();
+    cout << "Altura: " << a.altura() << endl;
 
     // copia a árvore
     b = a;
