@@ -139,37 +139,45 @@ namespace prglib {
     template <typename T,typename Compare> nodo_arvore<T,Compare>* nodo_arvore<T,Compare>::balanceia() {
         if (not (esq or dir)) return this;
         if (esq) {
-            auto ptr = esq.release();
-            esq.reset(ptr->balanceia());
+            auto p_esq = esq.release();
+            esq.reset(p_esq->balanceia());
         }
         if (dir) {
-            auto ptr = dir.release();
-            dir.reset(ptr->balanceia());
+            auto p_dir = dir.release();
+            dir.reset(p_dir->balanceia());
         }
 
         int fb = fatorB();
         auto ptr = this;
         while (fb < -1) {
             if (ptr->dir->fatorB() > 0) {
-                auto nodo = ptr->dir.release();
-                ptr->dir.reset(nodo->rotacionaL());
+                ptr->dir = ptr->dir->rotacionaL();
             }
-            ptr = ptr->rotacionaR();
+            auto nodo = ptr->rotacionaR();
+            ptr = nodo.release();
             fb = ptr->fatorB();
         }
         while (fb > 1) {
             if (ptr->esq->fatorB() < 0) {
-                auto nodo = ptr->esq.release();
-                ptr->esq.reset(nodo->rotacionaR());
+                ptr->esq = ptr->esq->rotacionaR();
             }
-            ptr = ptr->rotacionaL();
+            auto nodo = ptr->rotacionaL();
+            ptr = nodo.release();
             fb = ptr->fatorB();
         }
         ptr->h = -1;
-        return ptr;    }
+        return ptr;
+    }
 
     template <typename T,typename Compare> nodo_arvore<T,Compare>* nodo_arvore<T,Compare>::balanceia(bool otimo) {
-        return nullptr;
+        int h;
+        auto ptr = this;
+
+        do {
+            h = ptr->altura();
+            ptr = ptr->balanceia();
+        } while (h > ptr->altura() && otimo);
+        return ptr;
     }
 
     template <typename T,typename Compare> const T& nodo_arvore<T,Compare>::obtemMenor() const{
@@ -222,33 +230,30 @@ namespace prglib {
         }
     }
 
-    template <typename T,typename Compare> nodo_arvore<T,Compare> * nodo_arvore<T,Compare>::rotacionaL() {
+    template <typename T,typename Compare> std::unique_ptr<nodo_arvore<T,Compare>> nodo_arvore<T,Compare>::rotacionaL() {
         auto p3 = this;
 //        auto & p2 = p3->esq;
 //        auto & c = p2->dir;
-        auto p2 = p3->esq.release();
-        auto c = p2->dir.release();
+        auto p2 = p3->esq;
+        auto c = p2->dir;
 
-        p3->esq.reset(c);
-        p2->dir.reset(p3);
+        p3->esq = c;
+        p2->dir = p3;
 
-        auto raiz = p2.release();
-        return raiz;
+        return p2;
     }
 
-    template <typename T,typename Compare> nodo_arvore<T,Compare> * nodo_arvore<T,Compare>::rotacionaR() {
+    template <typename T,typename Compare> std::unique_ptr<nodo_arvore<T,Compare>> nodo_arvore<T,Compare>::rotacionaR() {
         auto p1 = this;
-        auto p2 = p1->dir.release();
-        auto b = p2->esq.release();
+        auto p2 = p1->dir;
+        auto b = p2->esq;
 
-        p1->dir.reset(b);
+        p1->dir = b;
         //if (b) b->pai = p1;
-        p2->esq.reset(p1);
+        p2->esq = p1;
         //p1->pai = p2;
         //p2->pai = nullptr; // nova raiz
-
-        auto raiz = p2.release();
-        return raiz;
+        return p2;
     }
 }
 #endif //PRG2_TREES_NODO_ARVORE_IMPL_H

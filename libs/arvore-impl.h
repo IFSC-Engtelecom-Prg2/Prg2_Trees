@@ -219,7 +219,7 @@ namespace prglib {
 
     template <typename T, typename Compare> void arvore<T,Compare>::balanceia() {
         TRY_PROC(this->raiz) {
-//            this->raiz = this->raiz->balanceia();
+            this->raiz = this->raiz->balanceia();
         }
     }
 

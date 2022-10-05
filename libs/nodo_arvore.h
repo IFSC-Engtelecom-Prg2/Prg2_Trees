@@ -75,10 +75,10 @@ namespace prglib {
         int fatorB();
 
         // balanceia a árvore
-        nodo_arvore<T, Compare> *balanceia();
+        nodo_arvore<T,Compare>* balanceia();
 
         // balanceia a árvore repetidamente, até que a altura não mais se reduza
-        nodo_arvore<T, Compare> *balanceia(bool otimo);
+        nodo_arvore<T,Compare>* balanceia(bool otimo);
 
         bool folha() const { return !esq && !dir; }
 
@@ -87,9 +87,9 @@ namespace prglib {
         std::unique_ptr<nodo_arvore<T,Compare>> esq, dir;
         Compare &comp_func;
 
-        nodo_arvore<T, Compare> *rotacionaL();
+        std::unique_ptr<nodo_arvore<T,Compare>> rotacionaL();
 
-        nodo_arvore<T, Compare> *rotacionaR();
+        std::unique_ptr<nodo_arvore<T,Compare>> rotacionaR();
 
     };
 }
