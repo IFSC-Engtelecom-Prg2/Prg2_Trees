@@ -122,7 +122,7 @@ namespace prglib {
         int he=0, hd=0;
 
         if (esq) he = 1 + esq->altura();
-        if (dir) he = 1 + dir->altura();
+        if (dir) hd = 1 + dir->altura();
 
         return he - hd;
     }
@@ -131,7 +131,7 @@ namespace prglib {
         int he=0, hd=0;
 
         if (esq) he = 1 + esq->altura();
-        if (dir) he = 1 + dir->altura();
+        if (dir) hd = 1 + dir->altura();
 
         return std::max(he, hd);
     }
@@ -149,6 +149,7 @@ namespace prglib {
 
         int fb = fatorB();
         auto ptr = this;
+        // tá maior do lado direito
         while (fb < -1) {
             if (ptr->dir->fatorB() > 0) {
                 ptr->dir = ptr->dir->rotacionaL();
@@ -157,6 +158,7 @@ namespace prglib {
             ptr = nodo.release();
             fb = ptr->fatorB();
         }
+        // tá maior do lado esquerdo
         while (fb > 1) {
             if (ptr->esq->fatorB() < 0) {
                 ptr->esq = ptr->esq->rotacionaR();
@@ -165,7 +167,7 @@ namespace prglib {
             ptr = nodo.release();
             fb = ptr->fatorB();
         }
-        ptr->h = -1;
+//        ptr->h = -1;
         return ptr;
     }
 
@@ -234,26 +236,26 @@ namespace prglib {
         auto p3 = this;
 //        auto & p2 = p3->esq;
 //        auto & c = p2->dir;
-        auto p2 = p3->esq;
-        auto c = p2->dir;
+        auto p2 = p3->esq.release();
+        auto c = p2->dir.release();
 
-        p3->esq = c;
-        p2->dir = p3;
+        p3->esq.reset(c);
+        p2->dir.reset(p3);
 
-        return p2;
+        return std::unique_ptr<nodo_arvore<T,Compare>>(p2);
     }
 
     template <typename T,typename Compare> std::unique_ptr<nodo_arvore<T,Compare>> nodo_arvore<T,Compare>::rotacionaR() {
         auto p1 = this;
-        auto p2 = p1->dir;
-        auto b = p2->esq;
+        auto p2 = p1->dir.release();
+        auto b = p2->esq.release();
 
-        p1->dir = b;
+        p1->dir.reset(b);
         //if (b) b->pai = p1;
-        p2->esq = p1;
+        p2->esq.reset(p1);
         //p1->pai = p2;
         //p2->pai = nullptr; // nova raiz
-        return p2;
+        return std::unique_ptr<nodo_arvore<T,Compare>>(p2);
     }
 }
 #endif //PRG2_TREES_NODO_ARVORE_IMPL_H

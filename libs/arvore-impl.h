@@ -21,49 +21,53 @@ using std::endl;
 
 namespace prglib {
 
-    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(Compare compare):comp_func(compare) {
+    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(Compare compare):comp_func(compare),_owner(true) {
 
     }
 
     template <typename T, typename Compare> arvore_basica<T,Compare>::~arvore_basica() {
-
+        if (_owner && raiz != nullptr) {
+            delete raiz;
+        }
     }
 
-    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(const arvore_basica<T,Compare>& outra): comp_func(outra.comp_func) {
+    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(const arvore_basica<T,Compare>& outra): comp_func(outra.comp_func),_owner(true) {
         *this = outra;
     }
 
-    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(nodo_arvore<T,Compare> * ptr, Compare compare): comp_func(compare) {
-        raiz.reset(ptr);
+    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(nodo_arvore<T,Compare> * ptr, Compare compare): comp_func(compare),_owner(false),raiz(ptr) {
     }
 
-    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(istream &inp,Compare compare): comp_func(compare) {
+    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(istream &inp,Compare compare): comp_func(compare),_owner(true) {
         T data;
 
         inp >> data;
         if (inp.fail()) throw std::runtime_error("não pode ler da stream");
-        raiz = std::make_shared<nodo_arvore<T,Compare>>(data,this->comp_func);
+        raiz = new nodo_arvore<T,Compare>(data,this->comp_func);
 
         while (inp >> data) raiz->adiciona(data);
     }
 
-    template <typename T, typename Compare> template <typename Container> arvore_basica<T,Compare>::arvore_basica(Container &dados,Compare compare): comp_func(compare) {
+    template <typename T, typename Compare> template <typename Container> arvore_basica<T,Compare>::arvore_basica(Container &dados,Compare compare): comp_func(compare),_owner(true) {
         if (! dados.empty()) {
             auto it = dados.begin();
-            raiz = std::make_shared<nodo_arvore<T,Compare>>(*it,this->comp_func);
+            raiz = new nodo_arvore<T,Compare>(*it,this->comp_func);
             for (it++; it != dados.end(); it++) raiz->adiciona(*it);
         }
     }
 
     template <typename T, typename Compare> arvore_basica<T,Compare>& arvore_basica<T,Compare>::operator=(const arvore_basica<T,Compare> & outra) {
+        if (_owner) {
+            delete raiz;
+        }
         if (!outra.vazia()) {
             auto it = outra.preorder_begin();
             this->comp_func = outra.comp_func;
-            raiz = std::make_shared<nodo_arvore<T,Compare>>(it->obtem(),this->comp_func);
+            raiz = new nodo_arvore<T,Compare>(it->obtem(),this->comp_func);
             for (; it != outra.preorder_end(); it++) {
                 raiz->adiciona(it->obtem());
             }
-        } else raiz.reset();
+        }
     	return *this;
     }
 
@@ -202,7 +206,7 @@ namespace prglib {
         if (this->raiz) {
             this->raiz->adiciona(dado);
         } else {
-            this->raiz = std::make_unique<nodo_arvore<T,Compare>>(dado,this->comp_func);
+            this->raiz = new nodo_arvore<T,Compare>(dado,this->comp_func);
         }
     }
 
@@ -210,7 +214,8 @@ namespace prglib {
         TRY_PROC(this->raiz) {
             if (this->raiz->folha()) {
                 auto algo = this->raiz->obtem();
-                this->raiz.reset();
+                delete this->raiz;
+                this->raiz = nullptr;
                 return algo;
             }
             return this->raiz->remove(dado);
@@ -225,7 +230,7 @@ namespace prglib {
 
     template <typename T, typename Compare> void arvore<T,Compare>::balanceia(bool otimo) {
         TRY_PROC(this->raiz) {
-//            this->raiz = this->raiz->balanceia(otimo);
+            this->raiz = this->raiz->balanceia(otimo);
         }
     }
 
@@ -260,7 +265,7 @@ namespace prglib {
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::preorder_iterator arvore_basica<T,Compare>::preorder_begin() const{
-        return preorder_iterator(this->raiz.get());
+        return preorder_iterator(this->raiz);
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::preorder_iterator arvore_basica<T,Compare>::preorder_end() const {
@@ -268,7 +273,7 @@ namespace prglib {
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::inorder_iterator arvore_basica<T,Compare>::inorder_begin() const{
-        return inorder_iterator(this->raiz.get());
+        return inorder_iterator(this->raiz);
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::inorder_iterator arvore_basica<T,Compare>::inorder_end() const {
@@ -276,7 +281,7 @@ namespace prglib {
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::preorder_riterator arvore_basica<T,Compare>::preorder_rbegin() const {
-        return preorder_riterator(this->raiz.get());
+        return preorder_riterator(this->raiz);
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::preorder_riterator arvore_basica<T,Compare>::preorder_rend() const {
@@ -284,7 +289,7 @@ namespace prglib {
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::inorder_riterator arvore_basica<T,Compare>::inorder_rbegin() const{
-        return inorder_riterator(this->raiz.get());
+        return inorder_riterator(this->raiz);
     }
 
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::inorder_riterator arvore_basica<T,Compare>::inorder_rend() const {
