@@ -10,8 +10,13 @@ using namespace std;
 using prglib::arvore;
 
 vector<int> rand_vector(int n) {
+    static bool _init = true;
     vector<int> v;
 
+    if (_init) {
+        _init = false;
+        srand(clock());
+    }
     while (n-- > 0) {
         v.push_back(rand() % 100000);
     }
@@ -23,7 +28,7 @@ vector<int> rand_vector(int n) {
  */
 int main(int argc, char** argv) {
 //    vector<int> v = {6,5,3,2,1,0,7,8,9,10,11};
-    auto v = rand_vector(1000);
+    auto v = rand_vector(100000);
     auto a = prglib::cria_arvore<int>(v);
 
     cout << "Valor da raiz: " << a.obtem() << endl;

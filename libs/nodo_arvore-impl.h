@@ -208,18 +208,18 @@ namespace prglib {
         auto pai = par.second;
         auto  ptr = par.first;
 
-        if (not ptr) throw -1;
+        if (not ptr) throw std::invalid_argument("valor inexistente");
 
         auto result = ptr->data;
 
         if (ptr->esq or ptr->dir) {
             int fb = ptr->fatorB();
             if (fb > 0) { // maior do lado esquerdo
-                auto maior = ptr->obtemMaior();
+                auto maior = ptr->esq->obtemMaior();
                 ptr->remove(maior);
                 ptr->data = maior;
             } else { // maior do lado direito
-                auto menor = ptr->obtemMenor();
+                auto menor = ptr->dir->obtemMenor();
                 ptr->remove(menor);
                 ptr->data = menor;
             }
