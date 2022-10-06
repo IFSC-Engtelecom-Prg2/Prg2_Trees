@@ -11,6 +11,7 @@
 #include <sstream>
 #include <ostream>
 #include <stdexcept>
+#include <utility>
 
 using std::ostream;
 using std::ostringstream;
@@ -32,7 +33,21 @@ namespace prglib {
     }
 
     template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(const arvore_basica<T,Compare>& outra): comp_func(outra.comp_func),_owner(true) {
-        *this = outra;
+        if (!outra.vazia()) {
+            auto it = outra.preorder_begin();
+            this->comp_func = outra.comp_func;
+            this->raiz = new nodo_arvore<T,Compare>(it->obtem(),this->comp_func);
+            for (; it != outra.preorder_end(); it++) {
+                this->raiz->adiciona(it->obtem());
+            }
+        } else {
+            this->raiz = nullptr;
+        }
+    }
+
+    template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(arvore_basica<T,Compare>&& outra): comp_func(outra.comp_func),_owner(true) {
+        this->raiz = outra.raiz;
+        outra.raiz = nullptr;
     }
 
     template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(nodo_arvore<T,Compare> * ptr, Compare compare): comp_func(compare),_owner(false),raiz(ptr) {
@@ -54,21 +69,6 @@ namespace prglib {
             raiz = new nodo_arvore<T,Compare>(*it,this->comp_func);
             for (it++; it != dados.end(); it++) raiz->adiciona(*it);
         }
-    }
-
-    template <typename T, typename Compare> arvore_basica<T,Compare>& arvore_basica<T,Compare>::operator=(const arvore_basica<T,Compare> & outra) {
-        if (_owner) {
-            delete raiz;
-        }
-        if (!outra.vazia()) {
-            auto it = outra.preorder_begin();
-            this->comp_func = outra.comp_func;
-            raiz = new nodo_arvore<T,Compare>(it->obtem(),this->comp_func);
-            for (; it != outra.preorder_end(); it++) {
-                raiz->adiciona(it->obtem());
-            }
-        }
-    	return *this;
     }
 
     template <typename T, typename Compare> bool arvore_basica<T,Compare>::existe(const T & dado) const {
@@ -124,8 +124,10 @@ namespace prglib {
     }
 
     template <typename T, typename Compare> unsigned int arvore_basica<T,Compare>::tamanho() const {
-        TRY_PROC(raiz) {
+        if (raiz) {
             return raiz->tamanho();
+        } else {
+            return 0;
         }
     }
 
@@ -195,11 +197,42 @@ namespace prglib {
     template <typename T, typename Compare> arvore<T,Compare>::arvore(const arvore<T,Compare>& outra): arvore_basica<T,Compare>(outra) {
     }
 
+    template <typename T, typename Compare> arvore<T,Compare>::arvore(arvore<T,Compare>&& outra): arvore_basica<T,Compare>(std::forward<arvore<T,Compare>>(outra)) {
+    }
+
     template <typename T, typename Compare> template <typename Container> arvore<T,Compare>::arvore(Container &dados, Compare compare): arvore_basica<T,Compare>(dados, compare) {}
 
     template <typename T, typename Compare> arvore<T,Compare>::arvore(istream &inp, Compare compare): arvore_basica<T,Compare>(inp, compare) {}
 
     template <typename T, typename Compare> arvore<T,Compare>::~arvore() {
+    }
+
+    template <typename T, typename Compare> arvore<T,Compare>& arvore<T,Compare>::operator=(const arvore<T,Compare> & outra) {
+        if (this->_owner && this->raiz != nullptr) {
+            delete this->raiz;
+        }
+        if (!outra.vazia()) {
+            auto it = outra.preorder_begin();
+            this->comp_func = outra.comp_func;
+            this->raiz = new nodo_arvore<T,Compare>(it->obtem(),this->comp_func);
+            for (; it != outra.preorder_end(); it++) {
+                this->raiz->adiciona(it->obtem());
+            }
+        } else {
+            this->raiz = nullptr;
+        }
+        this->_owner = true;
+        return *this;
+    }
+
+    template <typename T, typename Compare> arvore<T,Compare>& arvore<T,Compare>::operator=(arvore<T,Compare> && outra) {
+        if (this->_owner && this->raiz != nullptr) {
+            delete this->raiz;
+        }
+        this->raiz = outra.raiz;
+        outra.raiz = nullptr;
+        this->_owner = true;
+        return *this;
     }
 
     template <typename T, typename Compare> void arvore<T,Compare>::adiciona(const T &dado) {

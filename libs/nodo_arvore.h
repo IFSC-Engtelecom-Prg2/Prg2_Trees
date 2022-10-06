@@ -87,9 +87,9 @@ namespace prglib {
         std::unique_ptr<nodo_arvore<T,Compare>> esq, dir;
         Compare &comp_func;
 
-        std::unique_ptr<nodo_arvore<T,Compare>> rotacionaL();
+        nodo_arvore<T,Compare>* rotacionaL();
 
-        std::unique_ptr<nodo_arvore<T,Compare>> rotacionaR();
+        nodo_arvore<T,Compare>* rotacionaR();
 
     };
 }

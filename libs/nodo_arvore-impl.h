@@ -111,11 +111,11 @@ namespace prglib {
     }
 
     template <typename T,typename Compare> unsigned int nodo_arvore<T,Compare>::tamanho() const {
-        int ne=0, nd=0;
+        int n=0;
 
-        if (esq) ne = esq->tamanho();
-        if (dir) nd = dir->tamanho();
-        return 1 + nd + ne;
+        if (esq) n += esq->tamanho();
+        if (dir) n += dir->tamanho();
+        return 1 + n;
     }
 
     template <typename T,typename Compare> int nodo_arvore<T,Compare>::fatorB()  {
@@ -152,19 +152,19 @@ namespace prglib {
         // tá maior do lado direito
         while (fb < -1) {
             if (ptr->dir->fatorB() > 0) {
-                ptr->dir = ptr->dir->rotacionaL();
+                auto p_dir = ptr->dir.release();
+                ptr->dir.reset(p_dir->rotacionaL());
             }
-            auto nodo = ptr->rotacionaR();
-            ptr = nodo.release();
+            ptr = ptr->rotacionaR();
             fb = ptr->fatorB();
         }
         // tá maior do lado esquerdo
         while (fb > 1) {
             if (ptr->esq->fatorB() < 0) {
-                ptr->esq = ptr->esq->rotacionaR();
+                auto p_esq = ptr->esq.release();
+                ptr->esq.reset(p_esq->rotacionaR());
             }
-            auto nodo = ptr->rotacionaL();
-            ptr = nodo.release();
+            ptr = ptr->rotacionaL();
             fb = ptr->fatorB();
         }
 //        ptr->h = -1;
@@ -232,7 +232,7 @@ namespace prglib {
         }
     }
 
-    template <typename T,typename Compare> std::unique_ptr<nodo_arvore<T,Compare>> nodo_arvore<T,Compare>::rotacionaL() {
+    template <typename T,typename Compare> nodo_arvore<T,Compare>* nodo_arvore<T,Compare>::rotacionaL() {
         auto p3 = this;
 //        auto & p2 = p3->esq;
 //        auto & c = p2->dir;
@@ -242,10 +242,10 @@ namespace prglib {
         p3->esq.reset(c);
         p2->dir.reset(p3);
 
-        return std::unique_ptr<nodo_arvore<T,Compare>>(p2);
+        return p2;
     }
 
-    template <typename T,typename Compare> std::unique_ptr<nodo_arvore<T,Compare>> nodo_arvore<T,Compare>::rotacionaR() {
+    template <typename T,typename Compare> nodo_arvore<T,Compare>* nodo_arvore<T,Compare>::rotacionaR() {
         auto p1 = this;
         auto p2 = p1->dir.release();
         auto b = p2->esq.release();
@@ -255,7 +255,7 @@ namespace prglib {
         p2->esq.reset(p1);
         //p1->pai = p2;
         //p2->pai = nullptr; // nova raiz
-        return std::unique_ptr<nodo_arvore<T,Compare>>(p2);
+        return p2;
     }
 }
 #endif //PRG2_TREES_NODO_ARVORE_IMPL_H

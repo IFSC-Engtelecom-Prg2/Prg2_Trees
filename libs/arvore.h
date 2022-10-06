@@ -48,12 +48,14 @@ namespace prglib {
     public:
         arvore_basica(Compare compare);
         arvore_basica(const arvore_basica<T,Compare> & outra);
+        arvore_basica(arvore_basica<T,Compare> && outra);
         template <typename Container> arvore_basica(Container & dados, Compare compare);
         arvore_basica(istream & inp, Compare compare);
 
         ~arvore_basica();
 
-        arvore_basica& operator=(const arvore_basica<T,Compare> & outra);
+        arvore_basica& operator=(const arvore_basica<T,Compare> & outra) = delete;
+        arvore_basica& operator=(arvore_basica<T,Compare> && outra) = delete;
 
         // testa se dado existe na árvore
         bool existe(const T & dado) const;
@@ -194,9 +196,13 @@ namespace prglib {
     public:
         arvore(Compare compare);
         arvore(const arvore<T,Compare> & outra);
+        arvore(arvore<T,Compare> && outra); // move constructor
         template <typename Container> arvore(Container & dados, Compare compare);
         arvore(istream & inp, Compare compare);
         ~arvore();
+
+        arvore& operator=(const arvore<T,Compare> & outra);
+        arvore& operator=(arvore<T,Compare> && outra);
 
         void adiciona(const T & dado);
         T remove(const T & dado);
