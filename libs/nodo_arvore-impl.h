@@ -189,8 +189,48 @@ namespace prglib {
         return p_nodo->data;
     }
 
+    template <typename T,typename Compare>
+    std::pair<nodo_arvore<T,Compare>*,nodo_arvore<T,Compare>*> nodo_arvore<T,Compare>::obtem_nodo(const T & algo) {
+        auto ptr = this;
+        nodo_arvore<T,Compare>* pai = nullptr;
+
+        while (ptr != nullptr) {
+            if (ptr->data == algo) break;
+            pai = ptr;
+            if (algo < ptr->data) ptr = ptr->esq.get();
+            else ptr = ptr->dir.get();
+        }
+        return std::make_pair(ptr, pai);
+    }
+
     template <typename T,typename Compare> T nodo_arvore<T,Compare>::remove(const T & algo) {
-        throw std::runtime_error("not implemented");
+        auto par = obtem_nodo(algo);
+        auto pai = par.second;
+        auto  ptr = par.first;
+
+        if (not ptr) throw -1;
+
+        auto result = ptr->data;
+
+        if (ptr->esq or ptr->dir) {
+            int fb = ptr->fatorB();
+            if (fb > 0) { // maior do lado esquerdo
+                auto maior = ptr->obtemMaior();
+                ptr->remove(maior);
+                ptr->data = maior;
+            } else { // maior do lado direito
+                auto menor = ptr->obtemMenor();
+                ptr->remove(menor);
+                ptr->data = menor;
+            }
+        } else { // nodo é uma folha
+            if (pai) {
+                if (pai->esq.get() == ptr) pai->esq.reset();
+                else pai->dir.reset();
+            }
+        }
+
+        return result;
     }
 
     template <typename T,typename Compare> const T& nodo_arvore<T,Compare>::obtemMaior() const{

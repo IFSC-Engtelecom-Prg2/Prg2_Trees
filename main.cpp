@@ -41,6 +41,13 @@ int main(int argc, char** argv) {
 //    cout << "Altura: " << a.altura() << endl;
     cout << "depois: " << a.tamanho() << " elementos" << endl;
     cout << "depois: " << b.tamanho() << " elementos" << endl;
+
+    cout << "Maior=" << b.obtemMaior() << endl;
+    auto menor = b.obtemMenor();
+    cout << "Menor=" << menor << endl;
+    b.remove(menor);
+    cout << boolalpha << b.existe(menor) << endl;
+
 //    for (auto it=a.preorder_begin(); it != a.preorder_end(); it++) {
 //        cout << *it << ",";
 //    }

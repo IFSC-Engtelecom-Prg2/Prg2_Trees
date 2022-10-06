@@ -91,6 +91,7 @@ namespace prglib {
 
         nodo_arvore<T,Compare>* rotacionaR();
 
+        std::pair<nodo_arvore<T,Compare>*,nodo_arvore<T,Compare>*> obtem_nodo(const T & algo);
     };
 }
 #include "nodo_arvore-impl.h"
