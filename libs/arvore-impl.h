@@ -149,40 +149,56 @@ namespace prglib {
         }
     }
 
-    template <typename T, typename Compare> template <typename Container> void arvore_basica<T,Compare>::listeInOrder(Container &result) {
+    template <typename T, typename Compare> std::vector<T> arvore_basica<T,Compare>::listeInOrder() {
+        std::vector<T> result;
+
         if (raiz) {
-            return raiz->listeInOrder(result);
+            raiz->listeInOrder(result);
         }
+        return result;
     }
 
-    template <typename T, typename Compare> template <typename Container> void arvore_basica<T,Compare>::listePreOrder(Container &result) {
+    template <typename T, typename Compare> std::vector<T> arvore_basica<T,Compare>::listePreOrder() {
+        std::vector<T> result;
+
         if (raiz) {
-            return raiz->listePreOrder(result);
+            raiz->listePreOrder(result);
         }
+        return result;
+    }
+    template <typename T, typename Compare> std::vector<T> arvore_basica<T,Compare>::listePostOrder() {
+        std::vector<T> result;
+
+        if (raiz) {
+            raiz->listePostOrder(result);
+        }
+        return result;
+    }
+    template <typename T, typename Compare> std::vector<T> arvore_basica<T,Compare>::listeEmLargura() {
+        std::vector<T> result;
+
+        if (raiz) {
+            raiz->listeEmLargura(result);
+        }
+        return result;
     }
 
-    template <typename T, typename Compare> template <typename Container> void arvore_basica<T,Compare>::listePostOrder(Container &result) {
+    template <typename T, typename Compare> std::vector<T> arvore_basica<T,Compare>::obtemMaioresQue(const T &algo) const {
+        std::vector<T> result;
+
         if (raiz) {
-            return raiz->listePostOrder(result);
+            raiz->obtemMaioresQue(result, algo);
         }
+        return result;
     }
 
-    template <typename T, typename Compare> template <typename Container> void arvore_basica<T,Compare>::listeEmLargura(Container &result) {
+    template <typename T, typename Compare> std::vector<T> arvore_basica<T,Compare>::obtemMenoresQue(const T &algo) const {
+        std::vector<T> result;
         if (raiz) {
-            return raiz->listeEmLargura(result);
+            raiz->obtemMenoresQue(result, algo);
         }
-    }
 
-    template <typename T, typename Compare> void arvore_basica<T,Compare>::obtemMaioresQue(list<T> &result, const T &algo) const {
-        if (raiz) {
-            return raiz->obtemMaioresQue(result, algo);
-        }
-    }
-
-    template <typename T, typename Compare> void arvore_basica<T,Compare>::obtemMenoresQue(list<T> &result, const T &algo) const {
-        if (raiz) {
-            return raiz->obtemMenoresQue(result, algo);
-        }
+        return result;
     }
 
     template <typename T, typename Compare> void arvore_basica<T,Compare>::obtemIntervalo(list<T> &result, const T &start, const T &end) const {

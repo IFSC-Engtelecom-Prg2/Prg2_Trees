@@ -92,10 +92,10 @@ namespace prglib {
 
         // Versão alternativa: enumera os dados in-order, pre-order, post-order e breadth-first
         // copiando-os para uma lista
-        template <typename Container> void listeInOrder(Container & result);
-        template <typename Container> void listePreOrder(Container & result);
-        template <typename Container> void listePostOrder(Container & result);
-        template <typename Container> void listeEmLargura(Container & result);
+        std::vector<T> listeInOrder();
+        std::vector<T> listePreOrder();
+        std::vector<T> listePostOrder();
+        std::vector<T> listeEmLargura();
 
         // retorna a quantidade de dados na árvore
         unsigned int tamanho() const;
@@ -118,10 +118,10 @@ namespace prglib {
         const T & obtemMaior() const;
 
         // copia na lista "result" os dados menores que "algo"
-        void obtemMenoresQue(list<T> & result, const T & algo) const;
+        std::vector<T> obtemMenoresQue(const T & algo) const;
 
         // copia na lista "result" os dados maiores que "algo"
-        void obtemMaioresQue(list<T> & result, const T & algo) const;
+        std::vector<T> obtemMaioresQue(const T & algo) const;
 
         // obtém todos valores entre "start" e "end" (inclusive)
         void obtemIntervalo(list<T> & result, const T & start, const T & end) const;
