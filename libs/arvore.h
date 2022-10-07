@@ -124,7 +124,7 @@ namespace prglib {
         std::vector<T> obtemMaioresQue(const T & algo) const;
 
         // obtém todos valores entre "start" e "end" (inclusive)
-        void obtemIntervalo(list<T> & result, const T & start, const T & end) const;
+        std::vector<T> obtemIntervalo(const T & start, const T & end) const;
 
         // retorna a altura da folha mais distante da raiz
         unsigned int altura() const;

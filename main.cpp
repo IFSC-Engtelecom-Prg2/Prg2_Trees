@@ -53,7 +53,8 @@ int main(int argc, char** argv) {
     b.remove(menor);
     cout << boolalpha << b.existe(menor) << endl;
 
-    auto pre = b.listePreOrder();
+    auto pre = b.obtemIntervalo(10,50);
+    std::sort(pre.begin(), pre.end());
     for (auto & x: pre) {
         cout << x << ' ';
     }

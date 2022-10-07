@@ -56,13 +56,13 @@ namespace prglib {
         const T &obtemMaior() const;
 
         // copia na lista "result" os dados menores que "algo"
-        void obtemMenoresQue(list<T> &result, const T &algo);
+        void obtemMenoresQue(std::vector<T> &result, const T &algo);
 
         // copia na lista "result" os dados maiores que "algo"
-        void obtemMaioresQue(list<T> &result, const T &algo);
+        void obtemMaioresQue(std::vector<T> &result, const T &algo);
 
         // obtém todos valores entre "start" e "end" (inclusive)
-        void obtemIntervalo(list<T> &result, const T &start, const T &end);
+        void obtemIntervalo(std::vector<T> &result, const T &start, const T &end);
 
         // retorna a altura da folha mais distante da raiz
         unsigned int altura();

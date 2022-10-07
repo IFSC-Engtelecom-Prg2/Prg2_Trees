@@ -240,7 +240,7 @@ namespace prglib {
         return p_nodo->data;
     }
 
-    template <typename T,typename Compare> void nodo_arvore<T,Compare>::obtemMenoresQue(list<T> & result, const T & algo) {
+    template <typename T,typename Compare> void nodo_arvore<T,Compare>::obtemMenoresQue(std::vector<T> & result, const T & algo) {
         if (data <= algo) {
             result.push_back(data);
             if (esq) esq->listePreOrder(result);
@@ -250,7 +250,7 @@ namespace prglib {
         }
     }
 
-    template <typename T,typename Compare> void nodo_arvore<T,Compare>::obtemMaioresQue(list<T> & result, const T & algo) {
+    template <typename T,typename Compare> void nodo_arvore<T,Compare>::obtemMaioresQue(std::vector<T> & result, const T & algo) {
         if (data >= algo) {
             result.push_back(data);
             if (dir) dir->listePreOrder(result);
@@ -260,7 +260,7 @@ namespace prglib {
         }
     }
 
-    template <typename T,typename Compare> void nodo_arvore<T,Compare>::obtemIntervalo(list<T>& result, const T& start, const T& end) {
+    template <typename T,typename Compare> void nodo_arvore<T,Compare>::obtemIntervalo(std::vector<T>& result, const T& start, const T& end) {
         if (data < start) {
             if (dir) dir->obtemIntervalo(result, start, end);
         } else if (data > end) {

@@ -201,10 +201,14 @@ namespace prglib {
         return result;
     }
 
-    template <typename T, typename Compare> void arvore_basica<T,Compare>::obtemIntervalo(list<T> &result, const T &start, const T &end) const {
+    template <typename T, typename Compare> std::vector<T> arvore_basica<T,Compare>::obtemIntervalo(const T &start, const T &end) const {
+        std::vector<T> result;
+
         if (raiz) {
-            return raiz->obtemIntervalo(result, start, end);
+            raiz->obtemIntervalo(result, start, end);
         }
+
+        return result;
     }
 
     template <typename T, typename Compare> arvore<T,Compare>::arvore(Compare compare): arvore_basica<T,Compare>(compare) {
