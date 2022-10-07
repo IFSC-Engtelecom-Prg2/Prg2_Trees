@@ -9,7 +9,7 @@
 #define	ARVORE_H
 
 #include <libs/BasicTree.h>
-#include <list>
+#include <vector>
 #include <istream>
 #include <string>
 #include <iterator>
@@ -20,7 +20,6 @@
 
 using std::string;
 using std::istream;
-using std::list;
 using std::forward_iterator_tag;
 using std::stack;
 using std::queue;
