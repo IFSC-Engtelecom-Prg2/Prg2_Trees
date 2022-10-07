@@ -381,10 +381,10 @@ namespace prglib {
         return ptr->obtem();
     }
 
-    template <typename T, typename Compare> const nodo_arvore<T,Compare>* arvore_basica<T,Compare>::preorder_iterator::operator->() const {
+    template <typename T, typename Compare> const T* arvore_basica<T,Compare>::preorder_iterator::operator->() const {
         if (p.empty()) throw std::runtime_error("fim da iteração");
-        auto ptr = p.top();
-        return ptr;
+        auto const ptr = p.top();
+        return &ptr->obtem();
     }
 
     template<typename T, typename Compare>

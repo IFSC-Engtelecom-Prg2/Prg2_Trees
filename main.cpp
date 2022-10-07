@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
     cout << "len=" << t.tamanho() << endl;
     for (auto it=t.preorder_begin(); it != t.preorder_end(); it++) {
         auto & algo = *it;
-        cout << algo.nome << ", " << algo.idade << endl;
+        cout << it->nome << ", " << algo.idade << endl;
     }
     return 0;
 

@@ -147,7 +147,7 @@ namespace prglib {
 
             bool operator==(const preorder_iterator & it) const;
             bool operator!=(const preorder_iterator & it) const;
-            const nodo_arvore<T,Compare>* operator->() const;
+            const T* operator->() const;
             const T& operator*() const;
             virtual preorder_iterator& operator++();
             virtual preorder_iterator& operator++(int);
