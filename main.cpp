@@ -53,6 +53,12 @@ int main(int argc, char** argv) {
     b.remove(menor);
     cout << boolalpha << b.existe(menor) << endl;
 
+    auto pre = b.listePreOrder();
+    for (auto & x: pre) {
+        cout << x << ' ';
+    }
+    cout << endl;
+
 //    for (auto it=a.preorder_begin(); it != a.preorder_end(); it++) {
 //        cout << *it << ",";
 //    }

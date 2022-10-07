@@ -75,7 +75,7 @@ namespace prglib {
         return static_cast<const nodo_arvore<T,Compare>*>(this->dir.get());
     }
 
-    template <typename T,typename Compare> template <typename Container> void nodo_arvore<T,Compare>::listeEmLargura(Container & result) {
+    template <typename T,typename Compare> void nodo_arvore<T,Compare>::listeEmLargura(std::vector<T> & result) {
         std::queue<nodo_arvore<T,Compare>*> q;
 
         q.push(this);
@@ -92,22 +92,22 @@ namespace prglib {
         }
     }
 
-    template <typename T,typename Compare> template <typename Container> void nodo_arvore<T,Compare>::listeInOrder(Container & result) {
+    template <typename T,typename Compare> void nodo_arvore<T,Compare>::listeInOrder(std::vector<T> & result) {
         if (esq) esq->listeInOrder(result);
-        result.push_back(esq->data);
+        result.push_back(this->data);
         if (dir) dir->listeInOrder(result);
     }
 
-    template <typename T,typename Compare> template <typename Container> void nodo_arvore<T,Compare>::listePreOrder(Container & result) {
-        result.push_back(esq->data);
-        if (esq) esq->listeInOrder(result);
-        if (dir) dir->listeInOrder(result);
+    template <typename T,typename Compare>  void nodo_arvore<T,Compare>::listePreOrder(std::vector<T> & result) {
+        result.push_back(this->data);
+        if (esq) esq->listePreOrder(result);
+        if (dir) dir->listePreOrder(result);
     }
 
-    template <typename T,typename Compare> template <typename Container> void nodo_arvore<T,Compare>::listePostOrder(Container & result) {
-        if (esq) esq->listeInOrder(result);
-        if (dir) dir->listeInOrder(result);
-        result.push_back(esq->data);
+    template <typename T,typename Compare>  void nodo_arvore<T,Compare>::listePostOrder(std::vector<T> & result) {
+        if (esq) esq->listePostOrder(result);
+        if (dir) dir->listePostOrder(result);
+        result.push_back(this->data);
     }
 
     template <typename T,typename Compare> unsigned int nodo_arvore<T,Compare>::tamanho() const {

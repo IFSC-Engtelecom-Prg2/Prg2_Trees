@@ -29,17 +29,13 @@ namespace prglib {
 
         // Versão alternativa: enumera os dados in-order, pre-order, post-order e breadth-first
         // copiando-os para uma lista
-        template<typename Container>
-        void listeInOrder(Container &result);
+        void listeInOrder(std::vector<T> &result);
 
-        template<typename Container>
-        void listePreOrder(Container &result);
+        void listePreOrder(std::vector<T> &result);
 
-        template<typename Container>
-        void listePostOrder(Container &result);
+        void listePostOrder(std::vector<T> &result);
 
-        template<typename Container>
-        void listeEmLargura(Container &result);
+        void listeEmLargura(std::vector<T> &result);
 
         // retorna a quantidade de dados na árvore
         unsigned int tamanho() const;
