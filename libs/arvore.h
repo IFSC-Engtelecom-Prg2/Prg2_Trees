@@ -213,6 +213,7 @@ namespace prglib {
         arvore& operator=(arvore<T,Compare> && outra);
 
         void adiciona(const T & dado);
+        template <typename Container> void adiciona(const Container & dados);
         T remove(const T & dado);
 
         // balanceia a árvore

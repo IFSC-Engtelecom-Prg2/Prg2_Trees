@@ -193,6 +193,16 @@ TEST_F(TesteArvore, Adiciona) {
     ASSERT_TRUE(a.existe(23));
 }
 
+TEST_F(TesteArvore, AdicionaMuitos) {
+    std::vector<int> v = {5,3,1,2,7,6,8,12,15,11,9,0,4};
+
+    prglib::arvore<int> a;
+    a.adiciona(v);
+    std::sort(v.begin(), v.end());
+    auto obtido = a.listeInOrder();
+    ASSERT_EQ(v, obtido);
+}
+
 TEST_F(TesteArvore, CriarComparacaoEspecial) {
     std::vector<int> v = {-5,-3,1,2,-7,6,8,12,-15,11,9,0,4};
     std::vector<int> esperado = { -5, -3, 1, 0, 2, 4, -7, 6, 8, 12, 11, 9, -15 };

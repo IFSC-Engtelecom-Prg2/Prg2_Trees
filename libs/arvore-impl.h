@@ -263,6 +263,14 @@ namespace prglib {
         }
     }
 
+    template <typename T, typename Compare>
+    template <typename Container>
+    void arvore<T,Compare>::adiciona(const Container &dados) {
+        for (auto & dado: dados) {
+            adiciona(dado);
+        }
+    }
+
     template <typename T, typename Compare> T arvore<T,Compare>::remove(const T &dado) {
         TRY_PROC(this->raiz) {
             if (this->raiz->folha()) {
