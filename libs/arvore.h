@@ -231,14 +231,14 @@ template <typename T, typename Compare> string desenha_arvore(const arvore_basic
 
 
     // cria uma árvore com um comparador especializado, que deve ser o primeiro parâmetro
-    template <typename T, typename Compare, typename... Args> decltype(auto) cria_arvore_esp(Compare func, Args&&... args) {
+    template <typename T, typename Compare, typename... Args> decltype(auto) cria_arvore(Compare func, Args&&... args) {
         return arvore<T,Compare>(std::forward<Args>(args)..., func);
     }
 
     // cria uma árvore com o comparador predefinido
-    template <typename T, typename... Args> decltype(auto) cria_arvore(Args&&... args) {
-        return cria_arvore_esp<T>(default_compare<T>, std::forward<Args>(args)...);
-    }
+//    template <typename T, typename... Args> decltype(auto) cria_arvore(Args&&... args) {
+//        return cria_arvore_esp<T>(default_compare<T>, std::forward<Args>(args)...);
+//    }
 
 } // fim do namespace
 
