@@ -35,11 +35,12 @@ int main(int argc, char** argv) {
 //    vector<int> v = {6,5,3,2,1,0,7,8,9,10,11};
     auto v = rand_vector(100000);
     auto a = prglib::cria_arvore<int>(v);
-    auto t = prglib::cria_arvore_esp<Coisa>([](const Coisa &x, const Coisa &y) { return x.nome < y.nome?-1:x.nome>y.nome;});
+    auto t = prglib::cria_arvore_esp<Coisa>([](const Coisa &x, const Coisa &y) { return x.idade < y.idade?-1:x.idade>y.idade;});
 
     t.adiciona(Coisa{"um", 1});
     t.adiciona(Coisa{"dois", 2});
     t.adiciona(Coisa{"tres", 3});
+//    t.balanceia();
     cout << "len=" << t.tamanho() << endl;
     for (auto it=t.preorder_begin(); it != t.preorder_end(); it++) {
         auto & algo = *it;

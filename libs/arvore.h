@@ -8,7 +8,6 @@
 #ifndef ARVORE_H
 #define	ARVORE_H
 
-#include <libs/BasicTree.h>
 #include <vector>
 #include <istream>
 #include <string>
