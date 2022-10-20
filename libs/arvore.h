@@ -37,6 +37,8 @@ namespace prglib {
         return x1<x2?-1:x1!=x2;
     }
 
+    template <typename T> using comp_type = decltype(&default_compare<T>);
+
     // Uma arvore de pesquisa binária com operações que não modificam sua estrutura
     // Esta classe implementa as funcionalidades básicas, que não alteram a árvore
     // Isso possibilita que seus objetos compartilhem nodos (com limitações)
@@ -197,14 +199,14 @@ namespace prglib {
 
     // Uma árvore de pesquisa binária que pode ser modificada
     // Esta árvore estende arvore_basica com operações que modificam sua estrutura
-    template <typename T, typename Compare> class arvore : public arvore_basica<T,Compare> {
+    template <typename T, typename Compare=comp_type<T>> class arvore : public arvore_basica<T,Compare> {
     public:
-        arvore(Compare compare);
+        arvore(Compare compare=default_compare<T>);
         arvore(const arvore<T,Compare> & outra);
         arvore(arvore<T,Compare> && outra); // move constructor
-        template <typename Container> arvore(Container & dados, Compare compare);
-        arvore(istream & inp, Compare compare);
-        arvore(std::ifstream & inp, Compare compare);
+        template <typename Container> arvore(Container & dados, Compare compare=default_compare<T>);
+        arvore(istream & inp, Compare compare=default_compare<T>);
+        arvore(std::ifstream & inp, Compare compare=default_compare<T>);
         ~arvore();
 
         arvore& operator=(const arvore<T,Compare> & outra);

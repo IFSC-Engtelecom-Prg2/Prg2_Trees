@@ -23,7 +23,6 @@ using std::endl;
 namespace prglib {
 
     template <typename T, typename Compare> arvore_basica<T,Compare>::arvore_basica(Compare compare):comp_func(compare),_owner(true),raiz(nullptr) {
-
     }
 
     template <typename T, typename Compare> arvore_basica<T,Compare>::~arvore_basica() {
