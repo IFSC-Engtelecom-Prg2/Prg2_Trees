@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <istream>
+#include <fstream>
 #include <string>
 #include <iterator>
 #include <stack>
@@ -139,6 +140,12 @@ namespace prglib {
     public:
         class preorder_iterator: public forward_iterator_tag {
         public:
+            using value_type = T;
+            using pointer = T*;
+            using reference = T&;
+            using difference_type = std::ptrdiff_t;
+            using iterator_category = std::forward_iterator_tag;
+
             preorder_iterator();
             preorder_iterator(const preorder_iterator & it);
             preorder_iterator(const nodo_arvore<T,Compare> * raiz);
@@ -197,6 +204,7 @@ namespace prglib {
         arvore(arvore<T,Compare> && outra); // move constructor
         template <typename Container> arvore(Container & dados, Compare compare);
         arvore(istream & inp, Compare compare);
+        arvore(std::ifstream & inp, Compare compare);
         ~arvore();
 
         arvore& operator=(const arvore<T,Compare> & outra);
@@ -221,13 +229,13 @@ template <typename T, typename Compare> string desenha_arvore(const arvore_basic
 
 
     // cria uma árvore com um comparador especializado, que deve ser o primeiro parâmetro
-    template <typename T, typename Compare, typename... Args> decltype(auto) cria_arvore_esp(Compare func, Args&... args) {
-        return arvore<T,Compare>(args..., func);
+    template <typename T, typename Compare, typename... Args> decltype(auto) cria_arvore_esp(Compare func, Args&&... args) {
+        return arvore<T,Compare>(std::forward<Args>(args)..., func);
     }
 
     // cria uma árvore com o comparador predefinido
-    template <typename T, typename... Args> decltype(auto) cria_arvore(Args&... args) {
-        return cria_arvore_esp<T>(default_compare<T>, args...);
+    template <typename T, typename... Args> decltype(auto) cria_arvore(Args&&... args) {
+        return cria_arvore_esp<T>(default_compare<T>, std::forward<Args>(args)...);
     }
 
 } // fim do namespace

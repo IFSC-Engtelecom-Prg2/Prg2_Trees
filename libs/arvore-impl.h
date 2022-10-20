@@ -84,7 +84,7 @@ namespace prglib {
     }
 
     template <typename T, typename Compare> bool arvore_basica<T,Compare>::vazia() const {
-        return (bool)raiz;
+        return raiz == nullptr;
     }
 
     template <typename T, typename Compare> const T& arvore_basica<T,Compare>::obtem() const {
@@ -223,6 +223,7 @@ namespace prglib {
     template <typename T, typename Compare> template <typename Container> arvore<T,Compare>::arvore(Container &dados, Compare compare): arvore_basica<T,Compare>(dados, compare) {}
 
     template <typename T, typename Compare> arvore<T,Compare>::arvore(istream &inp, Compare compare): arvore_basica<T,Compare>(inp, compare) {}
+    template <typename T, typename Compare> arvore<T,Compare>::arvore(std::ifstream &inp, Compare compare): arvore_basica<T,Compare>(dynamic_cast<istream&>(inp), compare) {}
 
     template <typename T, typename Compare> arvore<T,Compare>::~arvore() {
     }
