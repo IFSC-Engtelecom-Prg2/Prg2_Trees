@@ -79,6 +79,22 @@ TEST_F(TesteArvore, Maior) {
     ASSERT_EQ(a.obtemMaior(), "zurrou");
 }
 
+TEST_F(TesteArvore, MenorQue) {
+    prglib::arvore<int> a({7,4,9,2,5,8,11,10,1,3});
+    ASSERT_EQ(a.obtemMenorQue(8), std::make_optional(7));
+    ASSERT_EQ(a.obtemMenorQue(4), std::make_optional(3));
+    ASSERT_EQ(a.obtemMenorQue(0), std::nullopt);
+    ASSERT_EQ(a.obtemMenorQue(1), std::nullopt);
+}
+
+TEST_F(TesteArvore, MaiorQue) {
+    prglib::arvore<int> a({7,4,9,2,5,8,11,10,1,3});
+    ASSERT_EQ(a.obtemMaiorQue(4), std::make_optional(5));
+    ASSERT_EQ(a.obtemMaiorQue(8), std::make_optional(9));
+    ASSERT_EQ(a.obtemMaiorQue(11), std::nullopt);
+    ASSERT_EQ(a.obtemMaiorQue(15), std::nullopt);
+}
+
 TEST_F(TesteArvore, Obtem) {
     std::ifstream arq(DataFile);
     prglib::arvore<std::string> a(arq);

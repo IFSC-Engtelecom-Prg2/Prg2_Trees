@@ -55,6 +55,12 @@ namespace prglib {
         // retorna o maior dado
         const T &obtemMaior() const;
 
+        // obtém o maior valor que é menor que "algo"
+        std::optional<T> obtemMenorQue(const T & algo) const;
+
+        // obtém o menor valor que é maior que "algo"
+        std::optional<T> obtemMaiorQue(const T & algo) const;
+
         // copia na lista "result" os dados menores que "algo"
         void obtemMenoresQue(std::vector<T> &result, const T &algo);
 
@@ -87,7 +93,7 @@ namespace prglib {
 
         nodo_arvore<T,Compare>* rotacionaR();
 
-        std::pair<nodo_arvore<T,Compare>*,nodo_arvore<T,Compare>*> obtem_nodo(const T & algo);
+        std::pair<nodo_arvore<T,Compare>*,nodo_arvore<T,Compare>*> obtem_nodo(const T & algo) const;
     };
 }
 #include "nodo_arvore-impl.h"

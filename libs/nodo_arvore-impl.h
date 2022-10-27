@@ -7,6 +7,8 @@
 
 #include <queue>
 #include <algorithm>
+#include "nodo_arvore.h"
+
 
 namespace prglib {
     template <typename T,typename Compare> nodo_arvore<T,Compare>::~nodo_arvore() {
@@ -190,8 +192,8 @@ namespace prglib {
     }
 
     template <typename T,typename Compare>
-    std::pair<nodo_arvore<T,Compare>*,nodo_arvore<T,Compare>*> nodo_arvore<T,Compare>::obtem_nodo(const T & algo) {
-        auto ptr = this;
+    std::pair<nodo_arvore<T,Compare>*,nodo_arvore<T,Compare>*> nodo_arvore<T,Compare>::obtem_nodo(const T & algo) const {
+        auto ptr = const_cast<nodo_arvore<T,Compare>*>(this);
         nodo_arvore<T,Compare>* pai = nullptr;
 
         while (ptr != nullptr) {
@@ -296,6 +298,53 @@ namespace prglib {
         //p1->pai = p2;
         //p2->pai = nullptr; // nova raiz
         return p2;
+    }
+
+    template<typename T, typename Compare>
+    std::optional<T> nodo_arvore<T, Compare>::obtemMenorQue(const T &algo) const {
+        auto ptr = const_cast<nodo_arvore<T, Compare>*>(this);
+        T * last = nullptr;
+        while (ptr != nullptr) {
+            if (ptr->data == algo) {
+                if (ptr->esq != nullptr) {
+                    return std::make_optional(ptr->esq->obtemMaior());
+                }
+                break;
+            } else if (algo < ptr->data) {
+                ptr = ptr->esq.get();
+            } else {
+                last = &ptr->data;
+                ptr = ptr->dir.get();
+            }
+
+        }
+        if (last != nullptr) {
+            return std::make_optional(*last);
+        }
+        return std::nullopt;
+    }
+
+    template<typename T, typename Compare>
+    std::optional<T> nodo_arvore<T, Compare>::obtemMaiorQue(const T &algo) const {
+        auto ptr = const_cast<nodo_arvore<T, Compare>*>(this);
+        T * last = nullptr;
+        while (ptr != nullptr) {
+            if (ptr->data == algo) {
+                if (ptr->dir != nullptr) {
+                    return std::make_optional(ptr->dir->obtemMenor());
+                }
+                break;
+            } else if (algo < ptr->data) {
+                last = &ptr->data;
+                ptr = ptr->esq.get();
+            } else {
+                ptr = ptr->dir.get();
+            }
+        }
+        if (last != nullptr) {
+            return std::make_optional(*last);
+        }
+        return std::nullopt;
     }
 }
 #endif //PRG2_TREES_NODO_ARVORE_IMPL_H

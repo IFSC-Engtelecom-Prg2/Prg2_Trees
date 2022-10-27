@@ -12,6 +12,8 @@
 #include <ostream>
 #include <stdexcept>
 #include <utility>
+#include "arvore.h"
+
 
 using std::ostream;
 using std::ostringstream;
@@ -63,7 +65,17 @@ namespace prglib {
     }
 
     template <typename T, typename Compare> template <typename Container> arvore_basica<T,Compare>::arvore_basica(Container &dados,Compare compare): comp_func(compare),_owner(true) {
-        if (! dados.empty()) {
+        auto it = dados.begin();
+        if (it != dados.end()) {
+            raiz = new nodo_arvore<T,Compare>(*it,this->comp_func);
+            for (it++; it != dados.end(); it++) raiz->adiciona(*it);
+        }
+    }
+
+    template<typename T, typename Compare>
+    arvore_basica<T, Compare>::arvore_basica(Compare compare, const std::initializer_list<T> &dados) {
+        auto it = dados.begin();
+        if (it != dados.end()) {
             auto it = dados.begin();
             raiz = new nodo_arvore<T,Compare>(*it,this->comp_func);
             for (it++; it != dados.end(); it++) raiz->adiciona(*it);
@@ -210,11 +222,37 @@ namespace prglib {
         return result;
     }
 
+    template<typename T, typename Compare>
+    std::optional<T> arvore_basica<T, Compare>::obtemMenorQue(const T &algo) const {
+        if (this->raiz) {
+            return this->raiz->obtemMenorQue(algo);
+        }
+        return std::nullopt;
+    }
+
+    template<typename T, typename Compare>
+    std::optional<T> arvore_basica<T, Compare>::obtemMaiorQue(const T &algo) const {
+        if (this->raiz) {
+            return this->raiz->obtemMaiorQue(algo);
+        }
+        return std::nullopt;
+    }
+
+
     template <typename T, typename Compare> arvore<T,Compare>::arvore(Compare compare): arvore_basica<T,Compare>(compare) {
     }
 
     template <typename T, typename Compare> arvore<T,Compare>::arvore(const arvore<T,Compare>& outra): arvore_basica<T,Compare>(outra) {
     }
+
+    template<typename T, typename Compare>
+    arvore<T, Compare>::arvore(const std::initializer_list<T> &dados, Compare compare):arvore_basica<T,Compare>(dados, compare) {
+    }
+
+//    template<typename T, typename Compare>
+//    void arvore<T, Compare>::adiciona(T &&dado) {
+//
+//    }
 
     template <typename T, typename Compare> arvore<T,Compare>::arvore(arvore<T,Compare>&& outra): arvore_basica<T,Compare>(std::forward<arvore<T,Compare>>(outra)) {
     }

@@ -16,6 +16,7 @@
 #include <stack>
 #include <queue>
 #include <memory>
+#include <initializer_list>
 #include "nodo_arvore.h"
 
 using std::string;
@@ -50,6 +51,7 @@ namespace prglib {
         arvore_basica(Compare compare);
         arvore_basica(const arvore_basica<T,Compare> & outra);
         arvore_basica(arvore_basica<T,Compare> && outra);
+        arvore_basica(Compare compare, const std::initializer_list<T> & dados);
         template <typename Container> arvore_basica(Container & dados, Compare compare);
         arvore_basica(istream & inp, Compare compare);
 
@@ -117,6 +119,12 @@ namespace prglib {
 
         // retorna o maior dado
         const T & obtemMaior() const;
+
+        // obtém o maior valor que é menor que "algo"
+        std::optional<T> obtemMenorQue(const T & algo) const;
+
+        // obtém o menor valor que é maior que "algo"
+        std::optional<T> obtemMaiorQue(const T & algo) const;
 
         // copia na lista "result" os dados menores que "algo"
         std::vector<T> obtemMenoresQue(const T & algo) const;
@@ -204,6 +212,7 @@ namespace prglib {
         arvore(Compare compare=default_compare<T>);
         arvore(const arvore<T,Compare> & outra);
         arvore(arvore<T,Compare> && outra); // move constructor
+        arvore(const std::initializer_list<T> & dados, Compare compare=default_compare<T>);
         template <typename Container> arvore(Container & dados, Compare compare=default_compare<T>);
         arvore(istream & inp, Compare compare=default_compare<T>);
         arvore(std::ifstream & inp, Compare compare=default_compare<T>);
@@ -213,6 +222,7 @@ namespace prglib {
         arvore& operator=(arvore<T,Compare> && outra);
 
         void adiciona(const T & dado);
+//        void adiciona(T && dado);
         template <typename Container> void adiciona(const Container & dados);
         T remove(const T & dado);
 
