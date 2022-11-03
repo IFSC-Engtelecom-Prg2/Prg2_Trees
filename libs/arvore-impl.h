@@ -37,9 +37,9 @@ namespace prglib {
         if (!outra.vazia()) {
             auto it = outra.preorder_begin();
             this->comp_func = outra.comp_func;
-            this->raiz = new nodo_arvore<T,Compare>(it->obtem(),this->comp_func);
+            this->raiz = new nodo_arvore<T,Compare>(*it,this->comp_func);
             for (; it != outra.preorder_end(); it++) {
-                this->raiz->adiciona(it->obtem());
+                this->raiz->adiciona(*it);
             }
         } else {
             this->raiz = nullptr;
@@ -223,19 +223,19 @@ namespace prglib {
     }
 
     template<typename T, typename Compare>
-    std::optional<T> arvore_basica<T, Compare>::obtemMenorQue(const T &algo) const {
+    std::experimental::optional<T> arvore_basica<T, Compare>::obtemMenorQue(const T &algo) const {
         if (this->raiz) {
             return this->raiz->obtemMenorQue(algo);
         }
-        return std::nullopt;
+        return std::experimental::nullopt;
     }
 
     template<typename T, typename Compare>
-    std::optional<T> arvore_basica<T, Compare>::obtemMaiorQue(const T &algo) const {
+    std::experimental::optional<T> arvore_basica<T, Compare>::obtemMaiorQue(const T &algo) const {
         if (this->raiz) {
             return this->raiz->obtemMaiorQue(algo);
         }
-        return std::nullopt;
+        return std::experimental::nullopt;
     }
 
 

@@ -6,6 +6,7 @@
 #define PRG2_TREES_NODO_ARVORE_H
 
 #include <memory>
+#include <experimental/optional>
 
 namespace prglib {
     template<typename T, typename Compare>
@@ -56,10 +57,10 @@ namespace prglib {
         const T &obtemMaior() const;
 
         // obtém o maior valor que é menor que "algo"
-        std::optional<T> obtemMenorQue(const T & algo) const;
+        std::experimental::optional<T> obtemMenorQue(const T & algo) const;
 
         // obtém o menor valor que é maior que "algo"
-        std::optional<T> obtemMaiorQue(const T & algo) const;
+        std::experimental::optional<T> obtemMaiorQue(const T & algo) const;
 
         // copia na lista "result" os dados menores que "algo"
         void obtemMenoresQue(std::vector<T> &result, const T &algo);

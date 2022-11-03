@@ -301,13 +301,13 @@ namespace prglib {
     }
 
     template<typename T, typename Compare>
-    std::optional<T> nodo_arvore<T, Compare>::obtemMenorQue(const T &algo) const {
+    std::experimental::optional<T> nodo_arvore<T, Compare>::obtemMenorQue(const T &algo) const {
         auto ptr = const_cast<nodo_arvore<T, Compare>*>(this);
         T * last = nullptr;
         while (ptr != nullptr) {
             if (ptr->data == algo) {
                 if (ptr->esq != nullptr) {
-                    return std::make_optional(ptr->esq->obtemMaior());
+                    return std::experimental::make_optional(ptr->esq->obtemMaior());
                 }
                 break;
             } else if (algo < ptr->data) {
@@ -319,19 +319,19 @@ namespace prglib {
 
         }
         if (last != nullptr) {
-            return std::make_optional(*last);
+            return std::experimental::make_optional(*last);
         }
-        return std::nullopt;
+        return std::experimental::nullopt;
     }
 
     template<typename T, typename Compare>
-    std::optional<T> nodo_arvore<T, Compare>::obtemMaiorQue(const T &algo) const {
+    std::experimental::optional<T> nodo_arvore<T, Compare>::obtemMaiorQue(const T &algo) const {
         auto ptr = const_cast<nodo_arvore<T, Compare>*>(this);
         T * last = nullptr;
         while (ptr != nullptr) {
             if (ptr->data == algo) {
                 if (ptr->dir != nullptr) {
-                    return std::make_optional(ptr->dir->obtemMenor());
+                    return std::experimental::make_optional(ptr->dir->obtemMenor());
                 }
                 break;
             } else if (algo < ptr->data) {
@@ -342,9 +342,9 @@ namespace prglib {
             }
         }
         if (last != nullptr) {
-            return std::make_optional(*last);
+            return std::experimental::make_optional(*last);
         }
-        return std::nullopt;
+        return std::experimental::nullopt;
     }
 }
 #endif //PRG2_TREES_NODO_ARVORE_IMPL_H
