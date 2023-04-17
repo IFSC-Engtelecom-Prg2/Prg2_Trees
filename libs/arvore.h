@@ -17,6 +17,8 @@
 #include <queue>
 #include <memory>
 #include <initializer_list>
+#include <optional>
+#include <functional>
 #include "nodo_arvore.h"
 
 using std::string;
