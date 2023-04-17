@@ -67,9 +67,13 @@ namespace prglib {
         const T & obtem() const;
 
         // retorna valor da árvore equivalente a dado
-        // se árvore vazia dispara exceção
+        // se valor não existir, dispara exceção
         const T & obtem(const T & dado) const;
-        
+
+        // retorna valor da árvore equivalente a dado
+        // se valor não existir, retorna nullopt
+        std::optional<std::reference_wrapper<const T>> procura(const T & dado) const;
+
         bool vazia() const;
 
         // iteradores PRE-ORDER e IN-ORDER

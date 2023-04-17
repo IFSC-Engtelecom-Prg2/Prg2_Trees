@@ -238,6 +238,15 @@ namespace prglib {
         return std::nullopt;
     }
 
+    template<typename T, typename Compare>
+    std::optional<std::reference_wrapper<const T>> arvore_basica<T, Compare>::procura(const T &dado) const {
+        try {
+            return std::make_optional(std::reference_wrapper<const T>(obtem(dado)));
+        } catch (...) {
+            return std::nullopt;
+        }
+    }
+
 
     template <typename T, typename Compare> arvore<T,Compare>::arvore(Compare compare): arvore_basica<T,Compare>(compare) {
     }

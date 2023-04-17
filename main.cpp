@@ -25,6 +25,10 @@ int comp_pontos(const Ponto & p1, const Ponto & p2) {
     return m1 > m2;
 }
 
+std::ostream& operator<<(ostream& out, const Ponto & p) {
+    out << '{' << p.x << ',' << p.y << '}';
+    return out;
+}
 int main() {
     // cria uma árvore de pontos
     auto arv = prglib::cria_arvore<Ponto>(comp_pontos);
@@ -34,6 +38,12 @@ int main() {
     arv.adiciona(Ponto{0.5, 1.9});
     arv.adiciona(Ponto{0.1, 2.9});
 
+    auto obj = arv.procura(Ponto{0.5, 1.9});
+    if (obj) {
+        auto val = obj.value().get();
+        auto p = arv.obtem(Ponto{0.5, 1.9});
+        std::cout << val << ", " << (void*)&val << " ... " << (void*)&p << std::endl;
+    }
     for (auto & p: arv) {
         std::cout << p.x << "," << p.y << std::endl;
     }
