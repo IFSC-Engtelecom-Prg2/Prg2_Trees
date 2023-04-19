@@ -83,10 +83,15 @@ namespace prglib {
         class inorder_iterator;
         class preorder_riterator;
         class inorder_riterator;
+        class bfs_iterator;
 
         // iteradores default: inorder
         inorder_iterator begin() const { return inorder_begin(); }
         inorder_iterator end() const { return inorder_end(); }
+
+        // iteradores bfs (em largura)
+        bfs_iterator bfs_begin() const;
+        bfs_iterator bfs_end() const;
 
         // iteradores diretos ...
         preorder_iterator preorder_begin() const;
@@ -186,6 +191,29 @@ namespace prglib {
 
             virtual inorder_iterator& operator++();
             inorder_iterator& operator++(int);
+        };
+
+        class bfs_iterator: public forward_iterator_tag {
+        public:
+            using value_type = T;
+            using pointer = T*;
+            using reference = T&;
+            using difference_type = std::ptrdiff_t;
+            using iterator_category = std::forward_iterator_tag;
+        public:
+            bfs_iterator();
+            bfs_iterator(const bfs_iterator & it);
+            bfs_iterator(const nodo_arvore<T,Compare> * raiz);
+            ~bfs_iterator() {}
+            bool operator==(const bfs_iterator & it) const;
+            bool operator!=(const bfs_iterator & it) const;
+            const T* operator->() const;
+            const T& operator*() const;
+
+            virtual bfs_iterator& operator++();
+            bfs_iterator& operator++(int);
+        protected:
+            queue<const nodo_arvore<T,Compare>*> q;
         };
 
         class preorder_riterator: public preorder_iterator {

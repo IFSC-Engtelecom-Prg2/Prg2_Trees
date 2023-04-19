@@ -163,18 +163,14 @@ namespace prglib {
     template <typename T, typename Compare> std::vector<T> arvore_basica<T,Compare>::listeInOrder() {
         std::vector<T> result;
 
-        if (raiz) {
-            raiz->listeInOrder(result);
-        }
+        std::copy(inorder_begin(), inorder_end(), std::back_inserter(result));
         return result;
     }
 
     template <typename T, typename Compare> std::vector<T> arvore_basica<T,Compare>::listePreOrder() {
         std::vector<T> result;
 
-        if (raiz) {
-            raiz->listePreOrder(result);
-        }
+        std::copy(preorder_begin(), preorder_end(), std::back_inserter(result));
         return result;
     }
     template <typename T, typename Compare> std::vector<T> arvore_basica<T,Compare>::listePostOrder() {
@@ -188,9 +184,7 @@ namespace prglib {
     template <typename T, typename Compare> std::vector<T> arvore_basica<T,Compare>::listeEmLargura() {
         std::vector<T> result;
 
-        if (raiz) {
-            raiz->listeEmLargura(result);
-        }
+        std::copy(bfs_begin(), bfs_end(), std::back_inserter(result));
         return result;
     }
 
@@ -388,6 +382,14 @@ namespace prglib {
         return inorder_iterator();
     }
 
+    template<typename T, typename Compare> typename arvore_basica<T,Compare>::bfs_iterator arvore_basica<T,Compare>::bfs_begin() const{
+        return bfs_iterator(this->raiz);
+    }
+
+    template<typename T, typename Compare> typename arvore_basica<T,Compare>::bfs_iterator arvore_basica<T,Compare>::bfs_end() const {
+        return bfs_iterator();
+    }
+
     template<typename T, typename Compare> typename arvore_basica<T,Compare>::preorder_riterator arvore_basica<T,Compare>::preorder_rbegin() const {
         return preorder_riterator(this->raiz);
     }
@@ -522,6 +524,61 @@ namespace prglib {
         return ++(*this);
     }
 
+    // bfs iterator
+    template<typename T, typename Compare>
+    arvore_basica<T,Compare>::bfs_iterator::bfs_iterator() {
+    }
+
+    template<typename T, typename Compare>
+    arvore_basica<T,Compare>::bfs_iterator::bfs_iterator(const arvore_basica::bfs_iterator &it) {
+        q = it.q;
+    }
+
+    template<typename T, typename Compare>
+    arvore_basica<T,Compare>::bfs_iterator::bfs_iterator(const nodo_arvore<T,Compare> * raiz) {
+        q.push(raiz);
+    }
+
+    template<typename T, typename Compare>
+    typename arvore_basica<T,Compare>::bfs_iterator &arvore_basica<T,Compare>::bfs_iterator::operator++() {
+        if (! this->q.empty()) {
+            auto ptr = this->q.front();
+            this->q.pop();
+            if (ptr->esquerda()) this->q.push(ptr->esquerda());
+            if (ptr->direita()) this->q.push(ptr->direita());
+        }
+        return *this;
+    }
+
+    template<typename T, typename Compare>
+    typename arvore_basica<T,Compare>::bfs_iterator &arvore_basica<T,Compare>::bfs_iterator::operator++(int) {
+        return ++(*this);
+    }
+
+    template<typename T, typename Compare>
+    bool arvore_basica<T,Compare>::bfs_iterator::operator==(const arvore_basica::bfs_iterator &it) const {
+        return q == it.q;
+    }
+
+    template<typename T, typename Compare>
+    bool arvore_basica<T,Compare>::bfs_iterator::operator!=(const arvore_basica::bfs_iterator &it) const {
+        return q != it.q;
+    }
+
+    template<typename T, typename Compare>
+    const T &arvore_basica<T,Compare>::bfs_iterator::operator*() const {
+        if (q.empty()) throw std::runtime_error("fim da iteração"); // a meu critério ???
+        auto ptr = q.front();
+        return ptr->obtem();
+    }
+
+    template <typename T, typename Compare> const T* arvore_basica<T,Compare>::bfs_iterator::operator->() const {
+        if (q.empty()) throw std::runtime_error("fim da iteração");
+        auto const ptr = q.front();
+        return &ptr->obtem();
+    }
+
+    // preorder_riterator
     template<typename T, typename Compare>
     arvore_basica<T,Compare>::inorder_riterator::inorder_riterator(): arvore_basica<T,Compare>::preorder_iterator() {
 

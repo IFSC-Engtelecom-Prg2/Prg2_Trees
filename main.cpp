@@ -38,6 +38,11 @@ int main() {
     arv.adiciona(Ponto{0.5, 1.9});
     arv.adiciona(Ponto{0.1, 2.9});
 
+    for (auto it=arv.bfs_begin(); it != arv.bfs_end(); it++) {
+        std::cout << *it << ";";
+    }
+    std::cout << std::endl;
+
     auto obj = arv.procura(Ponto{0.5, 1.9});
     if (obj) {
         auto val = obj.value().get();
