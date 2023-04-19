@@ -83,15 +83,11 @@ namespace prglib {
     }
 
     template <typename T, typename Compare> bool arvore_basica<T,Compare>::existe(const T & dado) const {
-        bool status = false;
         if (! vazia()) {
-            try {
-                raiz->obtem(dado);
-                status=true;
-            } catch (...) {            
-            }
+            auto ptr = raiz->procura(dado);
+            return ptr != nullptr;
         }
-        return status;
+        return false;
     }
 
     template <typename T, typename Compare> bool arvore_basica<T,Compare>::vazia() const {
@@ -106,7 +102,9 @@ namespace prglib {
 
     template <typename T, typename Compare> const T& arvore_basica<T,Compare>::obtem(const T &dado) const {
         TRY_PROC(raiz) {
-            return raiz->obtem(dado);
+            auto ptr = raiz->procura(dado);
+            if (ptr == nullptr) throw std::invalid_argument("dado não encontrado");
+            return *ptr;
         }
     }
 
@@ -234,11 +232,9 @@ namespace prglib {
 
     template<typename T, typename Compare>
     std::optional<std::reference_wrapper<const T>> arvore_basica<T, Compare>::procura(const T &dado) const {
-        try {
-            return std::make_optional(std::reference_wrapper<const T>(obtem(dado)));
-        } catch (...) {
-            return std::nullopt;
-        }
+        auto ptr = raiz->procura(dado);
+        if (ptr == nullptr) return std::nullopt;
+        return std::make_optional(std::reference_wrapper<const T>(*ptr));
     }
 
 

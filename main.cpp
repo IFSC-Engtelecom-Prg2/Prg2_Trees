@@ -45,8 +45,8 @@ int main() {
 
     auto obj = arv.procura(Ponto{0.5, 1.9});
     if (obj) {
-        auto val = obj.value().get();
-        auto p = arv.obtem(Ponto{0.5, 1.9});
+        auto & val = obj->get();
+        auto & p = arv.obtem(Ponto{0.5, 1.9});
         std::cout << val << ", " << (void*)&val << " ... " << (void*)&p << std::endl;
     }
     for (auto & p: arv) {

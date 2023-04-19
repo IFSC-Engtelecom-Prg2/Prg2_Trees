@@ -47,13 +47,13 @@ namespace prglib {
         }
     }
 
-    template <typename T,typename Compare> const T& nodo_arvore<T,Compare>::obtem(const T & algo) const {
+    template <typename T,typename Compare> const T* nodo_arvore<T,Compare>::procura(const T & algo) const {
         auto p_nodo = this;
 
         while (p_nodo) {
             auto comp = comp_func(algo, p_nodo->data);
             if (comp == 0) {
-                return p_nodo->data;
+                return &p_nodo->data;
                 break;
             }
             if (comp < 0) {
@@ -62,7 +62,7 @@ namespace prglib {
                 p_nodo = p_nodo->dir.get();
             }
         }
-        throw std::invalid_argument("valor não existe");
+        return nullptr;
     }
 
     template <typename T,typename Compare> const T& nodo_arvore<T,Compare>::obtem() const {

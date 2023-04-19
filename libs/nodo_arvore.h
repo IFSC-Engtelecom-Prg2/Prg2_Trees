@@ -22,10 +22,12 @@ namespace prglib {
         void adiciona(const T &algo);
 
         // obtém um dado da árvore
-        const T &obtem(const T &algo) const;
+//        const T &obtem(const T &algo) const;
 
         // obtém o valor da raiz da árvore
         const T &obtem() const;
+
+        const T* procura(const T& algo) const;
 
         // Versão alternativa: enumera os dados in-order, pre-order, post-order e breadth-first
         // copiando-os para uma lista
