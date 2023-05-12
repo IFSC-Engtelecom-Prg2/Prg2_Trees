@@ -36,9 +36,9 @@ namespace prglib {
     // -1: se x1 < x2
     // 1: se x1 > x2
     // 0: se x1 == x2
-    #define eq(a,b) !((a<b) && (b<a))
+    #define treeval_is_equal(a,b) !((a<b) && (b<a))
     template <typename T> int default_compare(const T & x1, const T & x2) {
-        return x1<x2?-1:eq(x1,x2);
+        return x1<x2?-1:treeval_is_equal(x1,x2);
     }
 
     template <typename T> using comp_type = decltype(&default_compare<T>);
@@ -49,19 +49,21 @@ namespace prglib {
     // A função de comparação para o tipo dos dados armazenados deve ser definida
     // como uma função binária, com resultados: 0 se dados iguais, -1 se arg1 < arg2,
     // 1 se arg1 > arg2
-    template <typename T, typename Compare> class arvore_basica {
+    template <typename T> class arvore_basica {
     public:
+        using Compare = std::function<bool(const T&, const T&)>;
+
         arvore_basica(Compare compare);
-        arvore_basica(const arvore_basica<T,Compare> & outra);
-        arvore_basica(arvore_basica<T,Compare> && outra);
+        arvore_basica(const arvore_basica<T> & outra);
+        arvore_basica(arvore_basica<T> && outra);
         arvore_basica(Compare compare, const std::initializer_list<T> & dados);
         template <typename Container> arvore_basica(Container & dados, Compare compare);
         arvore_basica(istream & inp, Compare compare);
 
         ~arvore_basica();
 
-        arvore_basica& operator=(const arvore_basica<T,Compare> & outra) = delete;
-        arvore_basica& operator=(arvore_basica<T,Compare> && outra) = delete;
+        arvore_basica& operator=(const arvore_basica<T> & outra) = delete;
+        arvore_basica& operator=(arvore_basica<T> && outra) = delete;
 
         // testa se dado existe na árvore
         bool existe(const T & dado) const;
@@ -115,11 +117,11 @@ namespace prglib {
         // Se o ramo esquerdo desta árvore for destruído,
         // a árvore retornada fica inválida ... se for usada depois disso,
         // um erro de acesso à memória ocorrerá
-        const arvore_basica<T,Compare> esquerda() const;
+        const arvore_basica<T> esquerda() const;
 
         // retorna a subárvore direita
         // mesmas restrições que "esquerda()"
-        const arvore_basica<T,Compare> direita() const;
+        const arvore_basica<T> direita() const;
 
         // retorna o menor dado
         const T & obtemMenor() const;
@@ -214,19 +216,19 @@ namespace prglib {
 
     // Uma árvore de pesquisa binária que pode ser modificada
     // Esta árvore estende arvore_basica com operações que modificam sua estrutura
-    template <typename T, typename Compare=comp_type<T>> class arvore : public arvore_basica<T,Compare> {
+    template <typename T> class arvore : public arvore_basica<T> {
     public:
-        arvore(Compare compare=default_compare<T>);
-        arvore(const arvore<T,Compare> & outra);
-        arvore(arvore<T,Compare> && outra); // move constructor
-        arvore(const std::initializer_list<T> & dados, Compare compare=default_compare<T>);
-        template <typename Container> arvore(Container & dados, Compare compare=default_compare<T>);
-        arvore(istream & inp, Compare compare=default_compare<T>);
-        arvore(std::ifstream & inp, Compare compare=default_compare<T>);
+        arvore(typename arvore_basica<T>::Compare compare=default_compare<T>);
+        arvore(const arvore<T> & outra);
+        arvore(arvore<T> && outra); // move constructor
+        arvore(const std::initializer_list<T> & dados, typename arvore_basica<T>::Compare compare=default_compare<T>);
+        template <typename Container> arvore(Container & dados, typename arvore_basica<T>::Compare compare=default_compare<T>);
+        arvore(istream & inp, typename arvore_basica<T>::Compare compare=default_compare<T>);
+        arvore(std::ifstream & inp, typename arvore_basica<T>::Compare compare=default_compare<T>);
         ~arvore();
 
-        arvore& operator=(const arvore<T,Compare> & outra);
-        arvore& operator=(arvore<T,Compare> && outra);
+        arvore& operator=(const arvore<T> & outra);
+        arvore& operator=(arvore<T> && outra);
 
         void adiciona(const T & dado);
 //        void adiciona(T && dado);
@@ -245,12 +247,12 @@ namespace prglib {
 // gera uma descrição de um diagrama DOT para a árvore
 // O resultado deve ser gravado em arquivo para se gerar o diagrama
 // com o programa "dot" ou "dotty"
-template <typename T, typename Compare> string desenha_arvore(const arvore_basica<T,Compare> & arv);
+template <typename T, typename Compare> string desenha_arvore(const arvore_basica<T> & arv);
 
 
     // cria uma árvore com um comparador especializado, que deve ser o primeiro parâmetro
-    template <typename T, typename Compare, typename... Args> decltype(auto) cria_arvore(Compare func, Args&&... args) {
-        return arvore<T,Compare>(std::forward<Args>(args)..., func);
+    template <typename T, typename... Args> decltype(auto) cria_arvore(typename arvore_basica<T>::Compare func, Args&&... args) {
+        return arvore<T>(std::forward<Args>(args)..., func);
     }
 
     // cria uma árvore com o comparador predefinido
