@@ -34,9 +34,12 @@ A árvore pode ser criada de duas maneiras:
      string nome;
    };
    
-   bool operator<(const Tipo& x1, const Tipo & x2 {
+   bool operator<(const Tipo& x1, const Tipo & x2) {
      // retorna true se x1 < x2
    }
+   
+   int main() {
+     arvore<Tipo> arv;
    ```   
 2. Usando a função utilitária __cria_arvore__, que possibilita informar uma função comparadora para o tipo de dados armazenado:
    ```c++
