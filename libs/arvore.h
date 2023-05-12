@@ -36,8 +36,9 @@ namespace prglib {
     // -1: se x1 < x2
     // 1: se x1 > x2
     // 0: se x1 == x2
+    #define eq(a,b) !((a<b) && (b<a))
     template <typename T> int default_compare(const T & x1, const T & x2) {
-        return x1<x2?-1:x1!=x2;
+        return x1<x2?-1:eq(x1,x2);
     }
 
     template <typename T> using comp_type = decltype(&default_compare<T>);
