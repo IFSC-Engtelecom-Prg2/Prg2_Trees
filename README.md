@@ -43,38 +43,14 @@ A árvore pode ser criada de duas maneiras:
    ```   
 2. Usando a função utilitária __cria_arvore__, que possibilita informar uma função comparadora para o tipo de dados armazenado:
    ```c++
-   // a função de comparação deve comparar dois valores e retornar:
-   // -1: se s1 < s2
-   // 0: se s1 == s2
-   // 1: se s1 > s2
-   int compare(const string & s1, const string & s2) {
-     return s1.size() < s2.size()?-1:size.size()!=s2.size();
+   // a função de comparação deve comparar dois valores e retornar
+   // true: se s1 < s2
+   // false: caso contrário
+   bool compare(const string & s1, const string & s2) {
+     return s1.size() < s2.size();
    }
    
    int main() {
      auto arv = prglib::cria_arvore(compare);
-   ```
-   Um detalhe a ser observado é com respeito ao tipo dessa árvore, o que é necessário quando for passá-la como parâmetro ou retorná-la como resultado de função. O tipo dela deve informar tanto o tipo de dados armazenado, quanto o tipo da função de comparação. Uma forma de fazer isso é mostrada a seguir:
-   ```c++
-   int compare(const string & s1, const string & s2) {
-     return s1.size() < s2.size()?-1:size.size()!=s2.size();
-   }
-
-   // aqui se cria um identificador para o tipo da função de comparação
-   using comp_func = decltype(&compare);
-   
-   // a função a seguir recebe uma árvore como parâmetro ... veja que ela indica o tipo da função de comparação no segundo argumento do template da arvore
-   void mostra(arvore<string,comp_func> & arv) {
-     for (auto & s: arv) {
-       cout << s << ' ';
-     }
-     cout << endl;
-   }
-   
-   int main() {
-     auto arv = prglib::cria_arvore(compare);
-     arv.adiciona("um", "dois", "tres"});
-     
-     mostra(arv);
    ```
    
