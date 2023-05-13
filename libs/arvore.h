@@ -31,18 +31,6 @@ namespace prglib {
     
     template <typename T,typename Compare> class nodo_arvore;
 
-    // Uma função default para comparação de valores ordenáveis, usada pela árvore
-    // Resultados:
-    // -1: se x1 < x2
-    // 1: se x1 > x2
-    // 0: se x1 == x2
-    #define treeval_is_equal(a,b) !((a<b) && (b<a))
-    template <typename T> inline bool default_compare(const T & x1, const T & x2) {
-        return x1<x2;
-    }
-
-    template <typename T> using comp_type = decltype(&default_compare<T>);
-
     // Uma arvore de pesquisa binária com operações que não modificam sua estrutura
     // Esta classe implementa as funcionalidades básicas, que não alteram a árvore
     // Isso possibilita que seus objetos compartilhem nodos (com limitações)
@@ -219,13 +207,15 @@ namespace prglib {
     // Esta árvore estende arvore_basica com operações que modificam sua estrutura
     template <typename T> class arvore : public arvore_basica<T> {
     public:
-        arvore(typename arvore_basica<T>::Compare compare=default_compare<T>);
+        static constexpr auto default_compare = [](const auto &x1, const auto &x2) { return x1 < x2;};
+
+        arvore(typename arvore_basica<T>::Compare compare=arvore::default_compare);
         arvore(const arvore<T> & outra);
         arvore(arvore<T> && outra); // move constructor
-        arvore(const std::initializer_list<T> & dados, typename arvore_basica<T>::Compare compare=default_compare<T>);
-        template <typename Container> arvore(Container & dados, typename arvore_basica<T>::Compare compare=default_compare<T>);
-        arvore(istream & inp, typename arvore_basica<T>::Compare compare=default_compare<T>);
-        arvore(std::ifstream & inp, typename arvore_basica<T>::Compare compare=default_compare<T>);
+        arvore(const std::initializer_list<T> & dados, typename arvore_basica<T>::Compare compare=arvore::default_compare);
+        template <typename Container> arvore(Container & dados, typename arvore_basica<T>::Compare compare=arvore::default_compare);
+        arvore(istream & inp, typename arvore_basica<T>::Compare compare=arvore::default_compare);
+        arvore(std::ifstream & inp, typename arvore_basica<T>::Compare compare=arvore::default_compare);
         ~arvore();
 
         arvore& operator=(const arvore<T> & outra);

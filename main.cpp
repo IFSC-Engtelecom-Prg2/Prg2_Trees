@@ -54,7 +54,7 @@ int main() {
 
     auto arv = prglib::cria_arvore<Ponto>(comp_pontos);
 //    prglib::arvore<Ponto> arv;
-    // adiciona alguns pontos
+//     adiciona alguns pontos
     arv.adiciona(Ponto{1.5, 0.9});
     arv.adiciona(Ponto{0.5, 1.9});
     arv.adiciona(Ponto{0.1, 2.9});
