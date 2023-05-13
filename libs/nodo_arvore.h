@@ -6,6 +6,7 @@
 #define PRG2_TREES_NODO_ARVORE_H
 
 #include <memory>
+#include <optional>
 
 namespace prglib {
     template<typename T, typename Compare>
@@ -92,6 +93,10 @@ namespace prglib {
         nodo_arvore<T,Compare>* rotacionaL();
 
         nodo_arvore<T,Compare>* rotacionaR();
+
+        inline int do_compare(const T& x1, const T& x2) const {
+            return comp_func(x1, x2)?-1:comp_func(x2, x1);
+        }
 
         std::pair<nodo_arvore<T,Compare>*,nodo_arvore<T,Compare>*> obtem_nodo(const T & algo) const;
     };

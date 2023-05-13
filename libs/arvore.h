@@ -37,8 +37,8 @@ namespace prglib {
     // 1: se x1 > x2
     // 0: se x1 == x2
     #define treeval_is_equal(a,b) !((a<b) && (b<a))
-    template <typename T> int default_compare(const T & x1, const T & x2) {
-        return x1<x2?-1:treeval_is_equal(x1,x2);
+    template <typename T> inline bool default_compare(const T & x1, const T & x2) {
+        return x1<x2;
     }
 
     template <typename T> using comp_type = decltype(&default_compare<T>);
@@ -156,6 +156,7 @@ namespace prglib {
         bool _owner;
 
         arvore_basica(nodo_arvore<T,Compare> * ptr, Compare compare);
+
     public:
         class preorder_iterator: public forward_iterator_tag {
         public:

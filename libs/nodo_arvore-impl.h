@@ -24,7 +24,7 @@ namespace prglib {
         auto p_nodo = this;
 
         while (true) {
-            auto comp = comp_func(algo, p_nodo->data);
+            auto comp = do_compare(algo, p_nodo->data);
             if (comp == 0) {
                 p_nodo->data = algo;
                 break;
@@ -51,7 +51,7 @@ namespace prglib {
         auto p_nodo = this;
 
         while (p_nodo) {
-            auto comp = comp_func(algo, p_nodo->data);
+            auto comp = do_compare(algo, p_nodo->data);
             if (comp == 0) {
                 return p_nodo->data;
                 break;
